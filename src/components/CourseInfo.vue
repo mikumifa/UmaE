@@ -3,26 +3,26 @@
     <div>
       {{ $t("chart.slope") }}：
       <span v-for="slope in this.slopes" :key="slope" :class="'box ' + slopeClass(slope)">
-        {{ slope }}
-      </span>
+      {{ slope }}
+    </span>
     </div>
     <div>
       {{ $t("chart.corner") }}：
       <span v-for="corner in this.corners" :key="corner" class="box corner">
-        {{ corner }}
-      </span>
+      {{ corner }}
+    </span>
     </div>
     <div>
       {{ $t("chart.straight") }}：
       <span v-for="straight in this.straights" :key="straight" class="box straight">
-        {{ straight }}
-      </span>
+      {{ straight }}
+    </span>
     </div>
     <div>
       {{
         $t("chart.phaseSeparators",
-          [(this.trackDetail.distance / 6).toFixed(0)
-            , (this.trackDetail.distance * 2 / 3).toFixed(0)])
+            [(this.trackDetail.distance / 6).toFixed(0)
+              , (this.trackDetail.distance * 2 / 3).toFixed(0)])
       }}
     </div>
     <div>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import MixinCourseData from "./data/MixinCourseData.vue"
+import MixinCourseData from "./data/MixinCourseData"
 
 export default {
   name: "CourseInfo",
@@ -69,7 +69,7 @@ export default {
     slopes() {
       const ret = []
       for (const slope of this.trackDetail.slopes) {
-        const s = slope.slope > 0 ? `↑${slope.slope * 0.0001}` : `↓${-slope.slope * 0.0001}`
+        const s =  slope.slope > 0 ? `↑${slope.slope * 0.0001}` : `↓${-slope.slope * 0.0001}`
         ret.push(`${slope.start}m～${slope.start + slope.length}m (${s})`)
       }
       return ret

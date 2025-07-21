@@ -1,5 +1,9 @@
 <template>
   <div class="main-frame">
+    <p>
+      <Adsense v-if="production" data-ad-client="ca-pub-4611969396217909" data-ad-slot="6969023753">
+      </Adsense>
+    </p>
     <el-form class="input-form" :inline="true">
       <el-form-item>
         <el-button @click="saveUma">{{ $t("message.saveUma") }}</el-button>
@@ -151,7 +155,7 @@
         <el-checkbox-group v-model="hasEvoSkills">
           <el-tooltip v-for="skill in availableSkills.evo" :key="skill.name" :content="skill.tooltip"
             :disabled="!('tooltip' in skill)" :open-delay="500">
-            <el-checkbox-button :value="skill.id">
+            <el-checkbox-button :label="skill.id">
               {{ skill.name }}
             </el-checkbox-button>
           </el-tooltip>
@@ -169,7 +173,7 @@
                 <el-checkbox-group v-model="hasSkills[menu.type][rarity]">
                   <el-tooltip v-for="skill in availableSkills[menu.type][rarity]" :key="skill.name"
                     :content="skill.tooltip" :disabled="!('tooltip' in skill)" :open-delay="500">
-                    <el-checkbox-button :value="skill.id">
+                    <el-checkbox-button :label="skill.id">
                       {{ skill.name }}
                     </el-checkbox-button>
                   </el-tooltip>
@@ -187,7 +191,7 @@
               <el-checkbox-group v-model="hasSkills[menu.type][rarity]">
                 <el-tooltip v-for="skill in availableSkills[menu.type][rarity]" :key="skill.name"
                   :content="skill.tooltip" :disabled="!('tooltip' in skill)" :open-delay="500">
-                  <el-checkbox-button :value="skill.id">
+                  <el-checkbox-button :label="skill.id">
                     {{ skill.name }}
                   </el-checkbox-button>
                 </el-tooltip>
@@ -200,6 +204,8 @@
       <ExecuteBlock ref="executeBlock" :exec-function="this.exec" />
     </el-form>
     <el-divider />
+    <Adsense v-if="production" data-ad-client="ca-pub-4611969396217909" data-ad-slot="6969023753">
+    </Adsense>
     <div>
       <h3>{{ $t("message.emulationResult") }}</h3>
       <table border="1" class="emulation-result">
@@ -279,12 +285,12 @@
 </template>
 
 <script>
-import MixinRaceCore from "@/components/MixinRaceCore.vue";
-import CourseInfo from "@/components/CourseInfo.vue";
-import ReleaseNote from "@/components/ReleaseNote.vue";
-import CalculatedValues from "@/components/CalculatedValues.vue";
-import ChartHint from "./ChartHint.vue";
-import ExecuteBlock from "./ExecuteBlock.vue";
+import MixinRaceCore from "@/components/MixinRaceCore";
+import CourseInfo from "@/components/CourseInfo";
+import ReleaseNote from "@/components/ReleaseNote";
+import CalculatedValues from "@/components/CalculatedValues";
+import ChartHint from "./ChartHint";
+import ExecuteBlock from "./ExecuteBlock";
 
 export default {
   name: "ChampMeet",

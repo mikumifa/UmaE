@@ -61,6 +61,10 @@
     <el-dialog :visible.sync="emulating" style="text-align: center">
       {{ $t("message.emulating") }}
       <el-progress :percentage="Math.min(100, Math.floor((100 * epoch) / runMaxEpoch))"></el-progress>
+      <p>
+        <Adsense v-if="$parent.production" data-ad-client="ca-pub-4611969396217909" data-ad-slot="6969023753">
+        </Adsense>
+      </p>
     </el-dialog>
   </div>
 </template>
