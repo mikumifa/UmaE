@@ -180,11 +180,15 @@ export default {
       const origin = SkillData.uniqueSkillData(this);
       if (this.$i18n.locale === "ja") {
         return origin.sort((a, b) => {
+          if (a.have !== b.have) {
+            return a.have ? 1 : 0;
+          }
           if (a.name < b.name) return -1;
           if (a.name > b.name) return 1;
           return 0;
         });
       }
+
       for (const skill of origin) {
         this.localizeSkill(skill, undefined, newSkillNames);
       }
@@ -192,6 +196,9 @@ export default {
         console.log(JSON.stringify(newSkillNames));
       }
       return origin.sort((a, b) => {
+        if (a.have !== b.have) {
+          return a.have ? 1 : 0;
+        }
         if (a.name < b.name) return -1;
         if (a.name > b.name) return 1;
         return 0;
