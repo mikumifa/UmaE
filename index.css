@@ -1,0 +1,5 @@
+/* index.css(入口文件中引入该入口样式文件) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* ...其他样式 */

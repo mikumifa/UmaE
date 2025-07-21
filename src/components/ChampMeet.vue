@@ -1,9 +1,5 @@
 <template>
   <div class="main-frame">
-    <p>
-      <Adsense v-if="production" data-ad-client="ca-pub-4611969396217909" data-ad-slot="6969023753">
-      </Adsense>
-    </p>
     <el-form class="input-form" :inline="true">
       <el-form-item>
         <el-button @click="saveUma">{{ $t("message.saveUma") }}</el-button>
@@ -136,6 +132,7 @@
         </el-select>
       </el-form-item>
       <br />
+
       <el-form-item :label="$t('message.uniqueSkill')">
         <el-select v-model="selectedUnique" filterable :filter-method="filterUniqueSkills"
           @change="clearUniqueSkillFilter">
@@ -148,6 +145,7 @@
         &emsp;{{ $t("message.uniqueLv0Hint") }}
       </el-form-item>
       <br />
+
       <el-form-item :label="$t('message.evoSkill')">
         <div v-if="availableSkills.evo.length === 0">
           {{ $t("message.evoHint") }}
@@ -156,12 +154,16 @@
           <el-tooltip v-for="skill in availableSkills.evo" :key="skill.name" :content="skill.tooltip"
             :disabled="!('tooltip' in skill)" :open-delay="500">
             <el-checkbox-button :label="skill.id">
-              {{ skill.name }}
+              <SkillLabel :name="skill.name" :have="skill.have" />
             </el-checkbox-button>
           </el-tooltip>
         </el-checkbox-group>
       </el-form-item>
       <br />
+      <!-- 添加按钮/开关 -->
+      <el-form-item label="显示超前技能">
+        <el-switch v-model="showPreemptiveSkill" active-text="显示" inactive-text="隐藏" />
+      </el-form-item>
       <el-collapse v-model="skillGroups">
         <el-collapse-item v-for="menu in skillMenu" :title="menu.title" :name="menu.type" :key="menu.title">
           <div v-for="rarity in raritySections" :key="menu.type + rarity">
@@ -174,7 +176,7 @@
                   <el-tooltip v-for="skill in availableSkills[menu.type][rarity]" :key="skill.name"
                     :content="skill.tooltip" :disabled="!('tooltip' in skill)" :open-delay="500">
                     <el-checkbox-button :label="skill.id">
-                      {{ skill.name }}
+                      <SkillLabel :name="skill.name" :have="skill.have" />
                     </el-checkbox-button>
                   </el-tooltip>
                 </el-checkbox-group>
@@ -191,8 +193,8 @@
               <el-checkbox-group v-model="hasSkills[menu.type][rarity]">
                 <el-tooltip v-for="skill in availableSkills[menu.type][rarity]" :key="skill.name"
                   :content="skill.tooltip" :disabled="!('tooltip' in skill)" :open-delay="500">
-                  <el-checkbox-button :label="skill.id">
-                    {{ skill.name }}
+                  <el-checkbox-button v-if="skill.have || showPreemptiveSkill" :label="skill.id">
+                    <SkillLabel :name="skill.name" :have="skill.have" />
                   </el-checkbox-button>
                 </el-tooltip>
               </el-checkbox-group>
@@ -204,8 +206,6 @@
       <ExecuteBlock ref="executeBlock" :exec-function="this.exec" />
     </el-form>
     <el-divider />
-    <Adsense v-if="production" data-ad-client="ca-pub-4611969396217909" data-ad-slot="6969023753">
-    </Adsense>
     <div>
       <h3>{{ $t("message.emulationResult") }}</h3>
       <table border="1" class="emulation-result">
@@ -291,7 +291,7 @@ import ReleaseNote from "@/components/ReleaseNote";
 import CalculatedValues from "@/components/CalculatedValues";
 import ChartHint from "./ChartHint";
 import ExecuteBlock from "./ExecuteBlock";
-
+import SkillLabel from './SkillLabel';
 export default {
   name: "ChampMeet",
   components: {
@@ -300,11 +300,13 @@ export default {
     CalculatedValues,
     ReleaseNote,
     CourseInfo,
+    SkillLabel,
   },
   mixins: [MixinRaceCore],
   data() {
     return {
       emulatorType: "cm",
+      showPreemptiveSkill: false,
     };
   },
   computed: {

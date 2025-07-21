@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <el-menu :default-active="defaultActive" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="0">{{ $t("emulatorType.teamRace") }}</el-menu-item>
       <el-menu-item index="1">{{ $t("emulatorType.champMeet") }}</el-menu-item>
     </el-menu>
     <router-view></router-view>

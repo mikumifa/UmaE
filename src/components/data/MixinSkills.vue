@@ -164,6 +164,7 @@ export default {
       if (this.$i18n.locale === "ja") {
         return origin;
       }
+      console.log(origin)
       for (const skillWrapper of origin) {
         for (const variant of skillWrapper.variants) {
           this.localizeSkill(variant, skillWrapper, newSkillNames);
@@ -471,9 +472,9 @@ export default {
         case "activate_count_all":
           return () =>
             thiz.skillTriggerCount[0] +
-              thiz.skillTriggerCount[1] +
-              thiz.skillTriggerCount[2] +
-              thiz.skillTriggerCount[3] >=
+            thiz.skillTriggerCount[1] +
+            thiz.skillTriggerCount[2] +
+            thiz.skillTriggerCount[3] >=
             value;
         case "activate_count_start":
           return () => thiz.skillTriggerCount[0] >= value;
@@ -1228,9 +1229,8 @@ export default {
       for (const effect of this.effects) {
         if (copy[effect]) {
           if (!copy.tooltip) copy.tooltip = "";
-          copy.tooltip += ` | ${effect}: ${
-            Math.round(copy[effect] * 100) / 100
-          }`;
+          copy.tooltip += ` | ${effect}: ${Math.round(copy[effect] * 100) / 100
+            }`;
         }
       }
 
@@ -1373,11 +1373,11 @@ export default {
     localizeSkill(skill, wrapper, newSkillNames) {
       const jaName = skill.name;
       const localName = this.$t(`skill.${jaName}`);
+      skill.have = this.$te(`skill.${jaName}`);
       if (localName.startsWith("skill.")) {
         newSkillNames[jaName] = "";
       }
-      skill.name =
-        localName && !localName.startsWith("skill.") ? localName : jaName;
+      skill.name = localName && !localName.startsWith("skill.") ? localName : jaName;
 
       const tooltipKey = `tooltip.${skill.id}`;
       if (this.$te(tooltipKey)) {

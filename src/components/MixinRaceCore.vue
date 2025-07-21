@@ -1114,19 +1114,19 @@ export default {
       return ret;
     },
     saveUma() {
-      this.$prompt("ウマ名を入力して下さい", "", {
+      this.$prompt("请输入马名", "", {
         inputValue: this.umaToLoad,
-        confirmButtonText: "セーブ",
-        cancelButtonText: "キャンセル",
+        confirmButtonText: "保存",
+        cancelButtonText: "取消",
         inputPattern: /.+/,
-        inputErrorMessage: "名前を入力して下さい。",
+        inputErrorMessage: "请输入名称。",
       }).then(({ value }) => {
         const umas = JSON.parse(localStorage.getItem("umas") || "{}");
         umas[value] = this.saveUmaToObject();
         localStorage.setItem("umas", JSON.stringify(umas));
         this.$message({
           type: "success",
-          message: `${value}をセーブしました。`,
+          message: `${value}已保存。`,
         });
         this.updateSavedUmas();
         this.umaToLoad = value;
@@ -1158,12 +1158,12 @@ export default {
       if (this.loadUmaFromObject(umas[this.umaToLoad])) {
         this.$message({
           type: "success",
-          message: `${this.umaToLoad}をロードしました。`,
+          message: `${this.umaToLoad}已加载。`,
         });
       } else {
         this.$message({
           type: "failed",
-          message: `${this.umaToLoad}は旧データで読み込めませんでした。`,
+          message: `${this.umaToLoad}是旧数据，无法加载。`,
         });
       }
     },
@@ -1206,7 +1206,7 @@ export default {
         .then(() => {
           this.$message({
             type: "success",
-            message: `クリップボードへのエクスポートに成功しました。`,
+            message: `已成功导出到剪贴板。`,
           });
         });
     },
@@ -1221,26 +1221,26 @@ export default {
       }
     },
     importUmaFromTool() {
-      this.$prompt("データをここに貼り付けてください", "", {
-        confirmButtonText: "インポート",
-        cancelButtonText: "キャンセル",
+      this.$prompt("请将数据粘贴到这里", "", {
+        confirmButtonText: "导入",
+        cancelButtonText: "取消",
         inputPattern: /.+/,
         inputErrorMessage: "",
       }).then(({ value }) => {
         this.loadUmaFromObject(JSON.parse(value));
         this.$message({
           type: "success",
-          message: `インポートに成功しました。`,
+          message: `导入成功。`,
         });
       });
     },
     importUmaFromGame() {
       this.$prompt(
-        "race_horse_data もしくは trained_chara (の JSON) をここに貼り付けてください",
+        "请将 race_horse_data 或 trained_chara (JSON) 粘贴到这里",
         "",
         {
-          confirmButtonText: "インポート",
-          cancelButtonText: "キャンセル",
+          confirmButtonText: "导入",
+          cancelButtonText: "取消",
           inputPattern: /.+/,
           inputErrorMessage: "",
         }
@@ -1255,7 +1255,7 @@ export default {
 
         const skills = raceHorseData["skill_array"];
 
-        this.selectedUnique = "なし／発動しない"; // Reset it to unselected first
+        this.selectedUnique = "なし／发动しない"; // 先重置为未选择
         const uniqueSkills = skills.filter((s) => s["skill_id"] < 200000);
         if (uniqueSkills.length === 1) {
           const uniqueSkill = uniqueSkills[0];
@@ -1296,7 +1296,7 @@ export default {
         this.initCondition();
         this.$message({
           type: "success",
-          message: `インポートに成功しました。脚質と適性を調整してください。`,
+          message: `导入成功。请调整运行方式和能力`,
         });
       });
     },
@@ -1306,7 +1306,7 @@ export default {
       localStorage.setItem("umas", JSON.stringify(umas));
       this.$message({
         type: "success",
-        message: `${this.umaToLoad}を削除しました。`,
+        message: `${this.umaToLoad}已删除。`,
       });
       this.updateSavedUmas();
     },
@@ -1396,7 +1396,7 @@ export default {
         borderColor: "yellow",
         borderWidth: 2,
         onClick: function () {
-          thiz.$message(`スタートディレイ：${thiz.startDelay.toFixed(3)}秒`);
+          thiz.$message(`启动延迟：${thiz.startDelay.toFixed(3)}秒`);
         },
       });
 
@@ -1411,9 +1411,9 @@ export default {
           xScaleID: "x-axis-0",
           onClick: function () {
             thiz.$message(
-              `掛かり：${(thiz.temptationModeEnd - thiz.temptationModeStart) *
+              `失控：${(thiz.temptationModeEnd - thiz.temptationModeStart) *
               thiz.frameLength
-              }秒、余分耐力消耗：${thiz.temptationWaste.toFixed(1)}`
+              }秒、剩余耐力消耗：${thiz.temptationWaste.toFixed(1)}`
             );
           },
         });

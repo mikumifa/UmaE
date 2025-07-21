@@ -59,6 +59,25 @@ class GameDatabase:
             if source in item and target in item:
                 if item[target]:
                     result[item[source]] = item[target]
+        #  "季節ウマ娘◎": "Seasonal Girl◎",
+        result["季節ウマ娘◎"] = "季节优俊少女◎"
+        result["季節ウマ娘○"] = "季节优俊少女○"
+
+        #  "天気の日◎": "Weather Days◎",
+        result["天気の日◎"] = "天气◎"
+        result["天気の日○"] = "天气○"
+
+        #  "良バ場◎": "Good Track Condition ◎",
+        result["良バ場◎"] = "场地◎"
+        result["良バ場○"] = "场地○"
+
+        #   "小回り◎": "Tight Turns◎",
+        result["小回り◎"] = "跑法擅长◎"
+        result["小回り○"] = "跑法擅长○"
+
+        # "勝負師": "Gambler",
+        # result["勝負師◎"] = "幸运◎"
+        # result["勝負師○"] = "幸运○"
 
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
