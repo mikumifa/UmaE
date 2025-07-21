@@ -3,7 +3,7 @@ on:
   #监听push操作
   push:
     branches:
-      - main # 这里只配置了main分支，所以只有推送main分支才会触发以下任务
+      - master # 这里只配置了main分支，所以只有推送main分支才会触发以下任务
 jobs:
   # 任务ID
   build-and-deploy:
@@ -15,13 +15,12 @@ jobs:
       - name: Checkout  ️
         uses: actions/checkout@v3
 
-      - name: Install and Build   # 安装依赖、打包，如果提前已打包好无需这一步
+      - name: Install and Build # 安装依赖、打包，如果提前已打包好无需这一步
         run: |
           npm install
           npm run build
 
-
-      - name: Deploy   # 部署
+      - name: Deploy # 部署
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages # 部署后提交到那个分支
