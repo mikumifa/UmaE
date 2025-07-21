@@ -1,7 +1,7 @@
 const path = require("path");
-
+const publicPath = process.env.NODE_ENV === "production" ? "./" : "/";
 module.exports = {
-  publicPath: "/UmaE/",
+  publicPath: publicPath,
 
   configureWebpack: {
     resolve: {
