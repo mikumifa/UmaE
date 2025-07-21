@@ -163,10 +163,10 @@ export default {
 
       const ret =
         this.calcExceedStatus(this.umaStatus.speed) *
-          statusCheckModifier *
-          this.condCoef[this.modifiedCondition] +
+        statusCheckModifier *
+        this.condCoef[this.modifiedCondition] +
         this.surfaceSpeedModify[this.trackDetail.surface][
-          this.track.surfaceCondition
+        this.track.surfaceCondition
         ] +
         this.passiveBonus.speed;
       return ret > 0 ? ret : 1;
@@ -174,16 +174,16 @@ export default {
     modifiedStamina() {
       return (
         this.calcExceedStatus(this.umaStatus.stamina) *
-          this.condCoef[this.modifiedCondition] +
+        this.condCoef[this.modifiedCondition] +
         this.passiveBonus.stamina
       );
     },
     modifiedPower() {
       const ret =
         this.calcExceedStatus(this.umaStatus.power) *
-          this.condCoef[this.modifiedCondition] +
+        this.condCoef[this.modifiedCondition] +
         this.surfacePowerModify[this.trackDetail.surface][
-          this.track.surfaceCondition
+        this.track.surfaceCondition
         ] +
         this.passiveBonus.power;
       return ret > 0 ? ret : 1;
@@ -191,15 +191,15 @@ export default {
     modifiedGuts() {
       return (
         this.calcExceedStatus(this.umaStatus.guts) *
-          this.condCoef[this.modifiedCondition] +
+        this.condCoef[this.modifiedCondition] +
         this.passiveBonus.guts
       );
     },
     modifiedWisdom() {
       return (
         this.calcExceedStatus(this.umaStatus.wisdom) *
-          this.condCoef[this.modifiedCondition] *
-          this.styleFitCoef[this.umaStatus.styleFit] +
+        this.condCoef[this.modifiedCondition] *
+        this.styleFitCoef[this.umaStatus.styleFit] +
         this.passiveBonus.wisdom
       );
     },
@@ -265,7 +265,7 @@ export default {
             baseTargetSpeed =
               this.baseSpeed * this.styleSpeedCoef[this.runningStyle][2] +
               Math.sqrt(this.modifiedSpeed / 500.0) *
-                this.distanceFitSpeedCoef[this.umaStatus.distanceFit];
+              this.distanceFitSpeedCoef[this.umaStatus.distanceFit];
             baseTargetSpeed +=
               Math.pow(this.modifiedGuts * 450, 0.597) * 0.0001;
             break;
@@ -347,11 +347,11 @@ export default {
       return (
         (this.baseSpeed * (this.styleSpeedCoef[this.runningStyle][2] + 0.01) +
           Math.sqrt(this.modifiedSpeed / 500) *
-            this.distanceFitSpeedCoef[this.umaStatus.distanceFit]) *
-          1.05 +
+          this.distanceFitSpeedCoef[this.umaStatus.distanceFit]) *
+        1.05 +
         Math.sqrt(500 * this.modifiedSpeed) *
-          this.distanceFitSpeedCoef[this.umaStatus.distanceFit] *
-          0.002 +
+        this.distanceFitSpeedCoef[this.umaStatus.distanceFit] *
+        0.002 +
         Math.pow(450 * this.modifiedGuts, 0.597) * 0.0001
       );
     },
@@ -380,7 +380,7 @@ export default {
       return (
         this.baseSpeed * this.styleSpeedCoef[this.runningStyle][2] +
         Math.sqrt(this.modifiedSpeed / 500) *
-          this.distanceFitSpeedCoef[this.umaStatus.distanceFit]
+        this.distanceFitSpeedCoef[this.umaStatus.distanceFit]
       );
     },
     vMin() {
@@ -393,10 +393,10 @@ export default {
       return (
         24 +
         0.0006 *
-          Math.sqrt(500 * this.modifiedPower) *
-          this.styleAccelerateCoef[this.runningStyle][0] *
-          this.surfaceFitAccelerateCoef[this.umaStatus.surfaceFit] *
-          this.distanceFitAccelerateCoef[this.umaStatus.distanceFit]
+        Math.sqrt(500 * this.modifiedPower) *
+        this.styleAccelerateCoef[this.runningStyle][0] *
+        this.surfaceFitAccelerateCoef[this.umaStatus.surfaceFit] *
+        this.distanceFitAccelerateCoef[this.umaStatus.distanceFit]
       );
     },
     a1() {
@@ -967,19 +967,19 @@ export default {
           ((this.courseLength - this.position - 60) *
             20 *
             this.spConsumptionCoef[this.trackDetail.surface][
-              this.track.surfaceCondition
+            this.track.surfaceCondition
             ] *
             this.spurtSpCoef *
             Math.pow(this.v3 - this.baseSpeed + 12, 2)) /
-            144 /
-            this.v3) /
-          (20 *
-            this.spConsumptionCoef[this.trackDetail.surface][
-              this.track.surfaceCondition
-            ] *
-            this.spurtSpCoef *
-            (Math.pow(v - this.baseSpeed + 12, 2) / 144 / v -
-              Math.pow(this.v3 - this.baseSpeed + 12, 2) / 144 / this.v3)) +
+          144 /
+          this.v3) /
+        (20 *
+          this.spConsumptionCoef[this.trackDetail.surface][
+          this.track.surfaceCondition
+          ] *
+          this.spurtSpCoef *
+          (Math.pow(v - this.baseSpeed + 12, 2) / 144 / v -
+            Math.pow(this.v3 - this.baseSpeed + 12, 2) / 144 / this.v3)) +
         60
       );
     },
@@ -988,27 +988,27 @@ export default {
         ((this.courseLength - this.position - 60) *
           20 *
           this.spConsumptionCoef[this.trackDetail.surface][
-            this.track.surfaceCondition
+          this.track.surfaceCondition
           ] *
           this.spurtSpCoef *
           Math.pow(this.v3 - this.baseSpeed + 12, 2)) /
-          144 /
-          this.v3 +
+        144 /
+        this.v3 +
         (this.courseLength - this.position - 60) *
-          (20 *
-            this.spConsumptionCoef[this.trackDetail.surface][
-              this.track.surfaceCondition
-            ] *
-            this.spurtSpCoef *
-            (Math.pow(v - this.baseSpeed + 12, 2) / 144 / v -
-              Math.pow(this.v3 - this.baseSpeed + 12, 2) / 144 / this.v3))
+        (20 *
+          this.spConsumptionCoef[this.trackDetail.surface][
+          this.track.surfaceCondition
+          ] *
+          this.spurtSpCoef *
+          (Math.pow(v - this.baseSpeed + 12, 2) / 144 / v -
+            Math.pow(this.v3 - this.baseSpeed + 12, 2) / 144 / this.v3))
       );
     },
     consumePerSecond(baseSpeed, v, phase) {
       let ret =
         (20.0 *
           this.spConsumptionCoef[this.trackDetail.surface][
-            this.track.surfaceCondition
+          this.track.surfaceCondition
           ] *
           Math.pow(v - baseSpeed + 12, 2)) /
         144;
@@ -1411,9 +1411,8 @@ export default {
           xScaleID: "x-axis-0",
           onClick: function () {
             thiz.$message(
-              `掛かり：${
-                (thiz.temptationModeEnd - thiz.temptationModeStart) *
-                thiz.frameLength
+              `掛かり：${(thiz.temptationModeEnd - thiz.temptationModeStart) *
+              thiz.frameLength
               }秒、余分耐力消耗：${thiz.temptationWaste.toFixed(1)}`
             );
           },
@@ -1605,7 +1604,7 @@ export default {
               value: label,
               borderColor: "black",
               borderWidth: 2,
-              onClick: function () {},
+              onClick: function () { },
             });
           }
           if (
@@ -1624,7 +1623,7 @@ export default {
               value: label,
               borderColor: "darkgreen",
               borderWidth: 2,
-              onClick: function () {},
+              onClick: function () { },
             });
           }
           const isInFinalCorner = this.isInFinalCorner(
@@ -1661,7 +1660,7 @@ export default {
               value: label,
               borderColor: "red",
               borderWidth: 2,
-              onClick: function () {},
+              onClick: function () { },
             });
           }
         }
@@ -1824,7 +1823,7 @@ export default {
     getSection(position) {
       return Math.floor((position * 24.0) / this.courseLength);
     },
-    test() {},
+    test() { },
   },
 };
 </script>

@@ -1,0 +1,71 @@
+import json
+import re
+import os
+
+
+class GameDatabase:
+    def __init__(self, source_path: str, cache_path: str = "namedict.json"):
+        self.source_path = source_path
+        self.cache_path = cache_path
+        self.index_map = {}  # type:ignore
+
+        if os.path.exists(cache_path):
+            self._load_cache()
+        else:
+            self._build_cache()
+
+    def _parse_line_to_dict(self, line: str) -> dict | None:
+        try:
+            pattern = re.compile(r'(\w+)=["\'](.*?)["\'](?=[,}])')
+            pairs = pattern.findall(line)
+            return dict(pairs) if pairs else None
+        except:
+            return None
+
+    def _build_cache(self):
+        with open(self.source_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip(",\n ")
+                if not line or "{" not in line:
+                    continue
+                item = self._parse_line_to_dict(line)
+                if item is None:
+                    continue
+                if "index" in item and "text_CN" in item and "category" in item:
+                    key = f"{item['category']}_{item['index']}"
+                    if key in self.index_map:
+                        print(f"[Warning] Duplicate index: {key}")
+                    else:
+                        self.index_map[key] = item
+
+        with open(self.cache_path, "w", encoding="utf-8") as f:
+            json.dump(self.index_map, f, ensure_ascii=False, indent=2)
+
+    def _load_cache(self):
+        with open(self.cache_path, "r", encoding="utf-8") as f:
+            self.index_map = json.load(f)
+
+    def get_name(self, category: str, index: str) -> str:
+        """传入 category 和 index，返回 text_CN 中文名"""
+        key = f"{category}_{index}"
+        return self.index_map.get(key, {}).get("text_CN", f"[Missing] {key}")
+
+    def create_map_json(
+        self, source="text_JP", target="text_CN", output_path="skill-cn.json"
+    ):
+        """根据 source 和 target 字段，构建映射字典并写入 JSON 文件"""
+        result = {}
+        for item in self.index_map.values():
+            if source in item and target in item:
+                result[item[source]] = item[target]
+
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+
+        print(f"✅ 映射文件已保存为: {output_path}")
+
+
+# 🧪 示例用法
+if __name__ == "__main__":
+    db = GameDatabase("name.lua", "name.json")
+    db.create_map_json(output_path="../src/locales/skill-cn.json")

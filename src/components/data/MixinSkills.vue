@@ -1,7 +1,6 @@
 <script>
 import * as RCP from "@/components/data/release_conserve_power_constants";
-
-const SkillData = require("./skillData");
+import { normalSkillData, uniqueSkillData } from "@/components/data/skillData.js";
 
 const effects = [
   "heal",
@@ -160,7 +159,7 @@ export default {
   computed: {
     normalSkillData() {
       const newSkillNames = {};
-      const origin = SkillData.normalSkillData(this);
+      const origin = normalSkillData(this);
       if (this.$i18n.locale === "ja") {
         return origin;
       }
@@ -176,7 +175,7 @@ export default {
     },
     uniqueSkillData() {
       const newSkillNames = {};
-      const origin = SkillData.uniqueSkillData(this);
+      const origin = uniqueSkillData(this);
       if (this.$i18n.locale === "ja") {
         return origin.sort((a, b) => {
           if (a.name < b.name) return -1;
@@ -471,9 +470,9 @@ export default {
         case "activate_count_all":
           return () =>
             thiz.skillTriggerCount[0] +
-              thiz.skillTriggerCount[1] +
-              thiz.skillTriggerCount[2] +
-              thiz.skillTriggerCount[3] >=
+            thiz.skillTriggerCount[1] +
+            thiz.skillTriggerCount[2] +
+            thiz.skillTriggerCount[3] >=
             value;
         case "activate_count_start":
           return () => thiz.skillTriggerCount[0] >= value;
@@ -1228,9 +1227,8 @@ export default {
       for (const effect of this.effects) {
         if (copy[effect]) {
           if (!copy.tooltip) copy.tooltip = "";
-          copy.tooltip += ` | ${effect}: ${
-            Math.round(copy[effect] * 100) / 100
-          }`;
+          copy.tooltip += ` | ${effect}: ${Math.round(copy[effect] * 100) / 100
+            }`;
         }
       }
 

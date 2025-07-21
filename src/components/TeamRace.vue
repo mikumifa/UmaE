@@ -1,11 +1,7 @@
 <template>
   <div class="main-frame">
     <p>
-      <Adsense
-        v-if="production"
-        data-ad-client="ca-pub-4611969396217909"
-        data-ad-slot="6969023753"
-      >
+      <Adsense v-if="production" data-ad-client="ca-pub-4611969396217909" data-ad-slot="6969023753">
       </Adsense>
     </p>
     <el-form class="input-form" :inline="true">
@@ -14,36 +10,21 @@
       </el-form-item>
       <el-form-item>
         <el-select v-model="umaToLoad" :placeholder="$t('message.umaToLoad')">
-          <el-option
-            v-for="(_, key) in savedUmas"
-            :label="key"
-            :value="key"
-            :key="key"
-          ></el-option>
+          <el-option v-for="(_, key) in savedUmas" :label="key" :value="key" :key="key"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button @click="loadUma">{{ $t("message.loadUma") }}</el-button>
       </el-form-item>
       <el-form-item>
-        <el-popconfirm
-          :confirm-button-text="$t('message.yes')"
-          :cancel-button-text="$t('message.no')"
-          :title="$t('message.deleteOrNot')"
-          trigger="click"
-          @confirm="removeUma"
-        >
+        <el-popconfirm :confirm-button-text="$t('message.yes')" :cancel-button-text="$t('message.no')"
+          :title="$t('message.deleteOrNot')" trigger="click" @confirm="removeUma">
           <el-button slot="reference">{{ $t("message.delete") }}</el-button>
         </el-popconfirm>
       </el-form-item>
       <el-form-item>
-        <el-popconfirm
-          :confirm-button-text="$t('message.yes')"
-          :cancel-button-text="$t('message.no')"
-          :title="$t('message.resetOrNot')"
-          trigger="click"
-          @confirm="resetUma"
-        >
+        <el-popconfirm :confirm-button-text="$t('message.yes')" :cancel-button-text="$t('message.no')"
+          :title="$t('message.resetOrNot')" trigger="click" @confirm="resetUma">
           <el-button slot="reference">{{ $t("message.reset") }}</el-button>
         </el-popconfirm>
       </el-form-item>
@@ -93,40 +74,21 @@
       </el-form-item>
       <el-form-item :label="$t('message.distanceFit')">
         <el-select v-model="umaStatus.distanceFit" style="width: 70px">
-          <el-option
-            v-for="rank in fitRanks"
-            :label="rank"
-            :value="rank"
-            :key="rank"
-          ></el-option>
+          <el-option v-for="rank in fitRanks" :label="rank" :value="rank" :key="rank"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('message.surfaceFit')">
         <el-select v-model="umaStatus.surfaceFit" style="width: 70px">
-          <el-option
-            v-for="rank in fitRanks"
-            :label="rank"
-            :value="rank"
-            :key="rank"
-          ></el-option>
+          <el-option v-for="rank in fitRanks" :label="rank" :value="rank" :key="rank"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('message.styleFit')">
         <el-select v-model="umaStatus.styleFit" style="width: 70px">
-          <el-option
-            v-for="rank in fitRanks"
-            :label="rank"
-            :value="rank"
-            :key="rank"
-          ></el-option>
+          <el-option v-for="rank in fitRanks" :label="rank" :value="rank" :key="rank"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('message.mood')">
-        <el-select
-          v-model="umaStatus.condition"
-          @change="initCondition"
-          style="width: 130px"
-        >
+        <el-select v-model="umaStatus.condition" @change="initCondition" style="width: 130px">
           <el-option :label="$t('message.mood0')" value="0"></el-option>
           <el-option :label="$t('message.mood1')" value="1"></el-option>
           <el-option :label="$t('message.mood2')" value="2"></el-option>
@@ -148,20 +110,11 @@
       <br />
       <el-form-item :label="$t('message.uniqueSkill')">
         <el-select v-model="selectedUnique">
-          <el-option
-            v-for="skill in this.uniqueSkillData"
-            :label="skill.name"
-            :value="skill.id"
-            :key="skill.id"
-          />
+          <el-option v-for="skill in this.uniqueSkillData" :label="skill.name" :value="skill.id" :key="skill.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="Lv">
-        <el-input-number
-          :max="6"
-          :min="0"
-          v-model="uniqueLevel"
-        ></el-input-number>
+        <el-input-number :max="6" :min="0" v-model="uniqueLevel"></el-input-number>
         &emsp;{{ $t("message.uniqueLv0Hint") }}
       </el-form-item>
       <br />
@@ -170,12 +123,8 @@
           {{ $t("message.evoHint") }}
         </div>
         <el-checkbox-group v-model="hasEvoSkills">
-          <el-tooltip
-            v-for="skill in availableSkills.evo"
-            :key="skill.name"
-            :content="skill.tooltip"
-            :disabled="!('tooltip' in skill)"
-          >
+          <el-tooltip v-for="skill in availableSkills.evo" :key="skill.name" :content="skill.tooltip"
+            :disabled="!('tooltip' in skill)">
             <el-checkbox-button :label="skill.id">
               {{ skill.name }}
             </el-checkbox-button>
@@ -184,29 +133,16 @@
       </el-form-item>
       <br />
       <el-collapse v-model="skillGroups">
-        <el-collapse-item
-          v-for="menu in skillMenu"
-          :title="menu.title"
-          :name="menu.type"
-          :key="menu.title"
-        >
+        <el-collapse-item v-for="menu in skillMenu" :title="menu.title" :name="menu.type" :key="menu.title">
           <div v-for="rarity in raritySections" :key="menu.type + rarity">
-            <el-collapse
-              v-if="
-                rarity === 'inherit' &&
-                ['speed', 'composite'].includes(menu.type)
-              "
-            >
-              <el-collapse-item
-                :title="menu.title + '：' + $t(rarityString[rarity])"
-              >
+            <el-collapse v-if="
+              rarity === 'inherit' &&
+              ['speed', 'composite'].includes(menu.type)
+            ">
+              <el-collapse-item :title="menu.title + '：' + $t(rarityString[rarity])">
                 <el-checkbox-group v-model="hasSkills[menu.type][rarity]">
-                  <el-tooltip
-                    v-for="skill in availableSkills[menu.type][rarity]"
-                    :key="skill.name"
-                    :content="skill.tooltip"
-                    :disabled="!('tooltip' in skill)"
-                  >
+                  <el-tooltip v-for="skill in availableSkills[menu.type][rarity]" :key="skill.name"
+                    :content="skill.tooltip" :disabled="!('tooltip' in skill)">
                     <el-checkbox-button :label="skill.id">
                       {{ skill.name }}
                     </el-checkbox-button>
@@ -215,22 +151,16 @@
               </el-collapse-item>
             </el-collapse>
 
-            <div
-              v-if="
-                rarity !== 'inherit' ||
-                !['speed', 'composite'].includes(menu.type)
-              "
-            >
+            <div v-if="
+              rarity !== 'inherit' ||
+              !['speed', 'composite'].includes(menu.type)
+            ">
               <h3 v-if="availableSkills[menu.type][rarity].length > 0">
                 {{ $t(rarityString[rarity]) }}
               </h3>
               <el-checkbox-group v-model="hasSkills[menu.type][rarity]">
-                <el-tooltip
-                  v-for="skill in availableSkills[menu.type][rarity]"
-                  :key="skill.name"
-                  :content="skill.tooltip"
-                  :disabled="!('tooltip' in skill)"
-                >
+                <el-tooltip v-for="skill in availableSkills[menu.type][rarity]" :key="skill.name"
+                  :content="skill.tooltip" :disabled="!('tooltip' in skill)">
                   <el-checkbox-button :label="skill.id">
                     {{ skill.name }}
                   </el-checkbox-button>
@@ -244,11 +174,7 @@
       <ExecuteBlock ref="executeBlock" :exec-function="this.exec" />
     </el-form>
     <el-divider />
-    <Adsense
-      v-if="production"
-      data-ad-client="ca-pub-4611969396217909"
-      data-ad-slot="6969023753"
-    >
+    <Adsense v-if="production" data-ad-client="ca-pub-4611969396217909" data-ad-slot="6969023753">
     </Adsense>
     <div>
       <h3>{{ $t("message.emulationResult") }}</h3>

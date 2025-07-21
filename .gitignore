@@ -22,3 +22,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 /_s3uploader
+.mypy_cache

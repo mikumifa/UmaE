@@ -80,9 +80,9 @@ export default {
     getEqualStamina(value) {
       return Math.floor(
         (this.$parent.spMax * value) /
-          10000.0 /
-          0.8 /
-          this.$parent.styleSpCoef[this.$parent.runningStyle]
+        10000.0 /
+        0.8 /
+        this.$parent.styleSpCoef[this.$parent.runningStyle]
       );
     },
   },

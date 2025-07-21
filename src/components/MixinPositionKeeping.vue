@@ -13,7 +13,7 @@ export default {
       },
     };
   },
-  mounted() {},
+  mounted() { },
   computed: {
     positionKeepingSelection() {
       return this.$refs.executeBlock.positionKeeping;

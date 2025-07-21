@@ -16,18 +16,9 @@
 
     <el-form-item :label="$t('message.skillActivateAdjustment')">
       <el-select v-model="skillActivateAdjustment" style="width: 130px">
-        <el-option
-          :label="$t('message.skillActivateAdjustment0')"
-          value="0"
-        ></el-option>
-        <el-option
-          :label="$t('message.skillActivateAdjustment1')"
-          value="1"
-        ></el-option>
-        <el-option
-          :label="$t('message.skillActivateAdjustment2')"
-          value="2"
-        ></el-option>
+        <el-option :label="$t('message.skillActivateAdjustment0')" value="0"></el-option>
+        <el-option :label="$t('message.skillActivateAdjustment1')" value="1"></el-option>
+        <el-option :label="$t('message.skillActivateAdjustment2')" value="2"></el-option>
         <el-option label="期望值" value="expected"></el-option>
       </el-select>
     </el-form-item>
@@ -54,10 +45,7 @@
 
     <el-form-item :label="$t('message.simulatePositionKeeping')">
       <el-select v-model="positionKeeping" style="width: 130px">
-        <el-option
-          :label="$t('message.positionKeeping.none')"
-          value="none"
-        ></el-option>
+        <el-option :label="$t('message.positionKeeping.none')" value="none"></el-option>
         <el-option label="1.04" value="1.04"></el-option>
         <!--        <el-option-->
         <!--          :label="$t('message.positionKeeping.nige')"-->
@@ -72,17 +60,7 @@
 
     <el-dialog :visible.sync="emulating" style="text-align: center">
       {{ $t("message.emulating") }}
-      <el-progress
-        :percentage="Math.min(100, Math.floor((100 * epoch) / runMaxEpoch))"
-      ></el-progress>
-      <p>
-        <Adsense
-          v-if="$parent.production"
-          data-ad-client="ca-pub-4611969396217909"
-          data-ad-slot="6969023753"
-        >
-        </Adsense>
-      </p>
+      <el-progress :percentage="Math.min(100, Math.floor((100 * epoch) / runMaxEpoch))"></el-progress>
     </el-dialog>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script>
-import {Line, mixins} from 'vue-chartjs'
+import { Line, mixins } from 'vue-chartjs'
 import Chart from 'chart.js'
 import chartjsPluginAnnotation from 'chartjs-plugin-annotation'
 const { reactiveProp } = mixins

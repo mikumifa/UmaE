@@ -1,10 +1,10 @@
-import ChampMeet from "@/components/ChampMeet";
-import TeamRace from "@/components/TeamRace";
+import ChampMeet from "@/components/ChampMeet.vue";
+import TeamRace from "@/components/TeamRace.vue";
 
 const routes = [
-    {path: '/', redirect: '/champions-meeting'},
-    {path: '/champions-meeting', component: ChampMeet},
-    {path: '/team-race', component: TeamRace},
-]
+  { path: "/", redirect: "/champions-meeting" },
+  { path: "/champions-meeting", component: ChampMeet },
+  { path: "/team-race", component: TeamRace },
+];
 
-export default routes
+export default routes;
