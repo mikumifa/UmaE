@@ -57,7 +57,8 @@ class GameDatabase:
         result = {}
         for item in self.index_map.values():
             if source in item and target in item:
-                result[item[source]] = item[target]
+                if item[target]:
+                    result[item[source]] = item[target]
 
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
@@ -67,5 +68,5 @@ class GameDatabase:
 
 # 🧪 示例用法
 if __name__ == "__main__":
-    db = GameDatabase("name.lua", "name.json")
-    db.create_map_json(output_path="../src/locales/skill-cn.json")
+    db = GameDatabase("python/name.lua", "name.json")
+    db.create_map_json(output_path="src/locales/skill-zh.json")
