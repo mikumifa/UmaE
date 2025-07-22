@@ -62,8 +62,8 @@
     "a0": "起跑加速度",
     "maxSpurtSpeed": "最高冲刺速度",
 
-    "minTime": "最小タイム",
-    "maxTime": "最大タイム",
+    "minTime": "最小时间",
+    "maxTime": "最大时间",
     "corrected": "补正后",
     "startHP": "初期HP",
     "rareHP": "金回复",
@@ -150,6 +150,7 @@
     "selectedUnique": "无／不发动"
   },
   "chart": {
+    "roadInfo": "赛道信息",
     "phase1": "←序盘|中盘→",
     "phase2": "←中盘|终盘→",
     "phase3": "p3→",
@@ -170,7 +171,14 @@
     "none": "无",
     "phaseSeparators": "中盘开始：{0}m | 终盘开始：{1}m",
     "firstSlopes": "最初爬坡：{0} | 下坡：{1}",
-    "finalCorner": "最终弯道"
+    "finalCorner": "最终弯道",
+    "phase": "阶段",
+    "targetSpeed": "目标速度",
+    "acceleration": "加速度",
+    "opening": "序盘",
+    "mid": "中盘",
+    "final": "终盘",
+    "maxSpurtSpeed": "最高冲刺"
   },
   "course": {
     "10001": "札幌",

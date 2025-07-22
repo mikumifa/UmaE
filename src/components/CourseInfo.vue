@@ -1,39 +1,64 @@
 <template>
-  <div>
-    <div>
-      {{ $t("chart.slope") }}：
-      <span v-for="slope in this.slopes" :key="slope" :class="'box ' + slopeClass(slope)">
-      {{ slope }}
-    </span>
+  <div class="space-y-4 p-4 text-sm">
+    <div class="flex items-center flex-wrap gap-2">
+      <span class="font-semibold text-gray-700">{{ $t("chart.slope") }}：</span>
+      <span v-for="slope in slopes" :key="slope"
+        :class="['box px-2 py-1 rounded  text-white text-xs font-semibold', slopeClass(slope)]">
+        {{ slope }}
+      </span>
     </div>
-    <div>
-      {{ $t("chart.corner") }}：
-      <span v-for="corner in this.corners" :key="corner" class="box corner">
-      {{ corner }}
-    </span>
+
+    <div class="flex items-center flex-wrap gap-2">
+      <span class="font-semibold text-gray-700">{{ $t("chart.corner") }}：</span>
+      <span v-for="corner in corners" :key="corner"
+        class="box corner px-2 py-1 rounded bg-blue-500 text-white text-xs font-semibold">
+        {{ corner }}
+      </span>
     </div>
-    <div>
-      {{ $t("chart.straight") }}：
-      <span v-for="straight in this.straights" :key="straight" class="box straight">
-      {{ straight }}
-    </span>
+
+    <div class="flex items-center flex-wrap gap-2">
+      <span class="font-semibold text-gray-700">{{ $t("chart.straight") }}：</span>
+      <span v-for="straight in straights" :key="straight"
+        class="box straight px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold">
+        {{ straight }}
+      </span>
     </div>
-    <div>
-      {{
-        $t("chart.phaseSeparators",
-            [(this.trackDetail.distance / 6).toFixed(0)
-              , (this.trackDetail.distance * 2 / 3).toFixed(0)])
-      }}
+
+    <div class="flex items-center flex-wrap gap-2 text-gray-600">
+      <span class="font-semibold text-gray-700">
+        {{
+          $t("chart.phaseSeparators",
+            [
+              (trackDetail.distance / 6).toFixed(0),
+              (trackDetail.distance * 2 / 3).toFixed(0)
+            ])
+        }}
+      </span>
     </div>
-    <div>
-      {{ $t("message.displayStatusCheck") }}：{{ displayStatusCheck }} | {{
-        $t("message.minTime")
-      }}：{{ formatTime($parent.trackDetail.finishTimeMin, 1) }}／{{
-        $t("message.maxTime")
-      }}：{{ formatTime($parent.trackDetail.finishTimeMax, 1) }}
+
+    <div class="flex items-center flex-wrap gap-4 text-gray-600">
+      <span class="font-semibold text-gray-700">
+        {{ $t("message.displayStatusCheck") }}：
+        <span class="box straight px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold">{{ displayStatusCheck
+        }}</span>
+      </span>
+      <span class="font-semibold text-gray-700">
+        {{ $t("message.minTime") }}：
+        <span class="box straight px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold">
+          {{ formatTime($parent.trackDetail.finishTimeMin, 1) }}
+        </span>
+      </span>
+      <span class="font-semibold text-gray-700">
+        ／{{ $t("message.maxTime") }}：
+        <span class="box straight px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold">
+          {{ formatTime($parent.trackDetail.finishTimeMax, 1) }}
+        </span>
+      </span>
     </div>
+
   </div>
 </template>
+
 
 <script>
 import MixinCourseData from "./data/MixinCourseData"
@@ -69,7 +94,7 @@ export default {
     slopes() {
       const ret = []
       for (const slope of this.trackDetail.slopes) {
-        const s =  slope.slope > 0 ? `↑${slope.slope * 0.0001}` : `↓${-slope.slope * 0.0001}`
+        const s = slope.slope > 0 ? `↑${slope.slope * 0.0001}` : `↓${-slope.slope * 0.0001}`
         ret.push(`${slope.start}m～${slope.start + slope.length}m (${s})`)
       }
       return ret
@@ -98,15 +123,11 @@ export default {
 
 <style scoped>
 .box {
-  border: solid 1px;
-  border-radius: 5px;
-  padding: 1px 4px;
-  margin: 1px 2px;
+  @apply inline-block px-2 py-1 m-0.5 mr-2 border border-gray-300 rounded-md text-sm;
 }
 
 .corner {
-  display: inline-block;
-  background: rgba(225, 190, 255, 0.2);
+  @apply bg-purple-100 border-purple-300 text-purple-800;
 }
 
 .straight {

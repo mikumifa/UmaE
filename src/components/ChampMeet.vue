@@ -206,64 +206,84 @@
       <ExecuteBlock ref="executeBlock" :exec-function="this.exec" />
     </el-form>
     <el-divider />
-    <div>
-      <h3>{{ $t("message.emulationResult") }}</h3>
-      <table border="1" class="emulation-result">
-        <tr>
-          <th></th>
-          <th>{{ $t("message.realTime") }}</th>
-          <th>{{ $t("message.StandardDeviation") }}</th>
-          <th>{{ $t("message.best") }}</th>
-          <th>{{ $t("message.worst") }}</th>
-          <th>{{ $t("message.timeInGame") }}</th>
-        </tr>
-        <tr>
-          <th>{{ $t("message.avg") }}</th>
-          <td>{{ formatTime(avgRaceTime, 3) }}</td>
-          <td>{{ timeStandardDeviation.toFixed(3) }}</td>
-          <td>{{ formatTime(bestTime, 3) }}</td>
-          <td>{{ formatTime(worstTime, 3) }}</td>
-          <td>{{ formatTime(toDisplayTime(avgRaceTime), 1) }}</td>
-        </tr>
-        <tr>
-          <th>{{ $t("message.MaxSpurt") }}</th>
-          <td>{{ formatTime(avgRaceTimeMaxSpurt, 3) }}</td>
-          <td>{{ timeStandardDeviationMaxSpurt.toFixed(3) }}</td>
-          <td>{{ formatTime(bestTimeMaxSpurt, 3) }}</td>
-          <td>{{ formatTime(worstTimeMaxSpurt, 3) }}</td>
-          <td>{{ formatTime(toDisplayTime(avgRaceTimeMaxSpurt), 1) }}</td>
-        </tr>
-        <tr>
-          <th>{{ $t("message.NotMaxSpurt") }}</th>
-          <td>{{ formatTime(avgRaceTimeNotMaxSpurt, 3) }}</td>
-          <td>{{ timeStandardDeviationNotMaxSpurt.toFixed(3) }}</td>
-          <td>{{ formatTime(bestTimeNotMaxSpurt, 3) }}</td>
-          <td>{{ formatTime(worstTimeNotMaxSpurt, 3) }}</td>
-          <td>{{ formatTime(toDisplayTime(avgRaceTimeNotMaxSpurt), 1) }}</td>
-        </tr>
-      </table>
-      <h3>{{ $t("message.spurtAverage") }}</h3>
-      <table border="1" class="emulation-result">
-        <tr>
-          <th>{{ $t("message.maxSpurtRate") }}</th>
-          <th>{{ $t("message.maxSpurtSPLeft") }}</th>
-          <th>{{ $t("message.nonMaxSpurtSPLack") }}</th>
-        </tr>
-        <tr>
-          <td>{{ maxSpurtRate }}%</td>
-          <td>{{ maxSpurtSPLeft }}</td>
-          <td>{{ nonMaxSpurtSPLack }}</td>
-        </tr>
-      </table>
+    <div class="p-6 space-y-6">
+      <h3 class="text-xl font-semibold text-gray-800">{{ $t("message.emulationResult") }}</h3>
+      <div class="overflow-x-auto">
+        <table class="table-auto w-full border border-gray-300 text-sm text-center">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2"></th>
+              <th class="px-4 py-2">{{ $t("message.realTime") }}</th>
+              <th class="px-4 py-2">{{ $t("message.StandardDeviation") }}</th>
+              <th class="px-4 py-2">{{ $t("message.best") }}</th>
+              <th class="px-4 py-2">{{ $t("message.worst") }}</th>
+              <th class="px-4 py-2">{{ $t("message.timeInGame") }}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr>
+              <th class="px-4 py-2 font-medium">{{ $t("message.avg") }}</th>
+              <td class="px-4 py-2">{{ formatTime(avgRaceTime, 3) }}</td>
+              <td class="px-4 py-2">{{ timeStandardDeviation.toFixed(3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(bestTime, 3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(worstTime, 3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(toDisplayTime(avgRaceTime), 1) }}</td>
+            </tr>
+            <tr>
+              <th class="px-4 py-2 font-medium">{{ $t("message.MaxSpurt") }}</th>
+              <td class="px-4 py-2">{{ formatTime(avgRaceTimeMaxSpurt, 3) }}</td>
+              <td class="px-4 py-2">{{ timeStandardDeviationMaxSpurt.toFixed(3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(bestTimeMaxSpurt, 3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(worstTimeMaxSpurt, 3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(toDisplayTime(avgRaceTimeMaxSpurt), 1) }}</td>
+            </tr>
+            <tr>
+              <th class="px-4 py-2 font-medium">{{ $t("message.NotMaxSpurt") }}</th>
+              <td class="px-4 py-2">{{ formatTime(avgRaceTimeNotMaxSpurt, 3) }}</td>
+              <td class="px-4 py-2">{{ timeStandardDeviationNotMaxSpurt.toFixed(3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(bestTimeNotMaxSpurt, 3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(worstTimeNotMaxSpurt, 3) }}</td>
+              <td class="px-4 py-2">{{ formatTime(toDisplayTime(avgRaceTimeNotMaxSpurt), 1) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-xl font-semibold text-gray-800">{{ $t("message.spurtAverage") }}</h3>
+      <div class="overflow-x-auto">
+        <table class="table-auto w-full border border-gray-300 text-sm text-center">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2">{{ $t("message.maxSpurtRate") }}</th>
+              <th class="px-4 py-2">{{ $t("message.maxSpurtSPLeft") }}</th>
+              <th class="px-4 py-2">{{ $t("message.nonMaxSpurtSPLack") }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="bg-white">
+              <td class="px-4 py-2">{{ maxSpurtRate }}%</td>
+              <td class="px-4 py-2">{{ maxSpurtSPLeft }}</td>
+              <td class="px-4 py-2">{{ nonMaxSpurtSPLack }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <el-divider />
-    <h3>
-      {{ $t("message.latestRaceTime") }}({{ formatTime(latestRaceTime, 3) }})
-    </h3>
-    <chart-hint />
-    <race-graph :chart-data="chartData" :options="chartOptions" />
-    <course-info :track="this.track" />
-    <el-divider />
+    <div class="space-y-6">
+      <h3 class="text-xl font-semibold text-gray-800">
+        {{ $t("message.latestRaceTime") }} ({{ formatTime(latestRaceTime, 3) }})
+      </h3>
+      <chart-hint />
+
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <race-graph :chart-data="chartData" :options="chartOptions" />
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+        <course-info :track="track" />
+      </div>
+    </div>
+
     <calculated-values />
     <el-divider />
     <release-note />
