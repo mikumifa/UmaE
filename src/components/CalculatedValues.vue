@@ -1,6 +1,44 @@
 <template>
-  <div>
-    <!-- 总状态 + 修正值 -->
+  <div class="max-w-sm w-full mx-auto my-4 rounded-2xl shadow-md bg-white dark:bg-gray-800 p-6">
+    <!-- 各阶段速度/加速度 表格 -->
+    <div class="max-w-md mx-0 my-4">
+      <table class="table-auto border border-gray-300 text-center text-xs">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-6 py-3">{{ $t("chart.phase") }}</th>
+            <th class="border px-6 py-3">{{ $t("chart.targetSpeed") }}</th>
+            <th class="border px-6 py-3">{{ $t("chart.acceleration") }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border px-6 py-3">{{ $t("chart.start") }}</td>
+            <td class="border px-6 py-3">{{ $parent.v1.toFixed(2) }}</td>
+            <td class="border px-6 py-3">{{ $parent.a1.toFixed(3) }}</td>
+          </tr>
+          <tr>
+            <td class="border px-6 py-3">{{ $t("chart.opening") }}</td>
+            <td class="border px-6 py-3">{{ $parent.v1.toFixed(2) }}</td>
+            <td class="border px-6 py-3">{{ $parent.a1.toFixed(3) }}</td>
+          </tr>
+          <tr>
+            <td class="border px-6 py-3">{{ $t("chart.mid") }}</td>
+            <td class="border px-6 py-3">{{ $parent.v2.toFixed(2) }}</td>
+            <td class="border px-6 py-3">{{ $parent.a2.toFixed(3) }}</td>
+          </tr>
+          <tr>
+            <td class="border px-6 py-3">{{ $t("chart.final") }}</td>
+            <td class="border px-6 py-3">{{ $parent.v3.toFixed(2) }}</td>
+            <td class="border px-6 py-3">{{ $parent.a3.toFixed(3) }}</td>
+          </tr>
+          <tr>
+            <td class="border px-6 py-3">{{ $t("message.maxSpurtSpeed") }}</td>
+            <td class="border px-6 py-3">{{ $parent.maxSpurtSpeed.toFixed(2) }}</td>
+            <td class="border px-6 py-3">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <!-- 总素质 -->
     <div class="flex items-center flex-wrap gap-2">
       <span class="font-semibold text-gray-700">{{ $t("message.totalStatus") }}：</span>
@@ -83,52 +121,14 @@
     </div>
 
 
-    <!-- 各阶段速度/加速度 表格 -->
-    <div class="max-w-md mx-0 my-4">
-      <table class="table-auto border border-gray-300 text-center text-xs">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="border px-6 py-3">{{ $t("chart.phase") }}</th>
-            <th class="border px-6 py-3">{{ $t("chart.targetSpeed") }}</th>
-            <th class="border px-6 py-3">{{ $t("chart.acceleration") }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="border px-6 py-3">{{ $t("chart.start") }}</td>
-            <td class="border px-6 py-3">{{ $parent.v1.toFixed(2) }}</td>
-            <td class="border px-6 py-3">{{ $parent.a1.toFixed(3) }}</td>
-          </tr>
-          <tr>
-            <td class="border px-6 py-3">{{ $t("chart.opening") }}</td>
-            <td class="border px-6 py-3">{{ $parent.v1.toFixed(2) }}</td>
-            <td class="border px-6 py-3">{{ $parent.a1.toFixed(3) }}</td>
-          </tr>
-          <tr>
-            <td class="border px-6 py-3">{{ $t("chart.mid") }}</td>
-            <td class="border px-6 py-3">{{ $parent.v2.toFixed(2) }}</td>
-            <td class="border px-6 py-3">{{ $parent.a2.toFixed(3) }}</td>
-          </tr>
-          <tr>
-            <td class="border px-6 py-3">{{ $t("chart.final") }}</td>
-            <td class="border px-6 py-3">{{ $parent.v3.toFixed(2) }}</td>
-            <td class="border px-6 py-3">{{ $parent.a3.toFixed(3) }}</td>
-          </tr>
-          <tr>
-            <td class="border px-6 py-3">{{ $t("message.maxSpurtSpeed") }}</td>
-            <td class="border px-6 py-3">{{ $parent.maxSpurtSpeed.toFixed(2) }}</td>
-            <td class="border px-6 py-3">—</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
 
 
     <div class="max-w-md mx-0 my-4">
       <div class="flex gap-2 items-center mb-2">
-        <label class="text-sm">{{ $t("message.from") }}:</label>
+        <label class="font-semibold text-gray-700">{{ $t("message.from") }}:</label>
         <input v-model.number="skillFrom" type="number" class="border px-2 py-1 w-20 text-xs">
-        <label class="text-sm">{{ $t("message.to") }}:</label>
+        <label class="font-semibold text-gray-700">{{ $t("message.to") }}:</label>
         <input v-model.number="skillTo" type="number" class="border px-2 py-1 w-20 text-xs">
         <el-button @click="updateSkillRates" type="success">
           {{ $t("action.update") }}
@@ -153,7 +153,6 @@
           </tr>
         </tbody>
       </table>
-
     </div>
 
 

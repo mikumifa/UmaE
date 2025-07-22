@@ -270,22 +270,15 @@
       </div>
     </div>
 
-    <div class="bg-white p-4 rounded-lg shadow-md">
+    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
       <h3 class="text-xl font-semibold text-gray-800">
         {{ $t("message.latestRaceTime") }} ({{ formatTime(latestRaceTime, 3) }})
       </h3>
       <chart-hint />
       <race-graph :chart-data="chartData" :options="chartOptions" />
     </div>
-
-
-
-    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-      <course-info :track="track" />
-    </div>
-    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-      <calculated-values />
-    </div>
+    <course-info :track="track" />
+    <calculated-values />
 
     <el-divider />
     <release-note />
