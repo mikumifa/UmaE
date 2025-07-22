@@ -20,7 +20,6 @@
     "wisdom": "智慧",
     "style": "脚质",
     "mood": "干劲",
-
     "distanceFit": "距离适性",
     "surfaceFit": "场地适性",
     "styleFit": "脚质适性",
@@ -50,18 +49,15 @@
     "maxSpurtRate": "最大冲刺率",
     "maxSpurtSPLeft": "最大时剩余HP",
     "nonMaxSpurtSPLack": "非最大时不足HP",
-
     "latestRaceTime": "最后一次模拟的细节",
     "totalStatus": "素质总和",
     "displayStatusCheck": "赛场检定",
     "deltaHint": "基准差＝和各赛道设定的最长实际时间的差距。数字负越多代表越快。",
-
     "skillActivateRate": "技能发动率",
     "temperamentRate": "焦虑率(挂かり率)",
     "v0": "起跑目标速度",
     "a0": "起跑加速度",
     "maxSpurtSpeed": "最高冲刺速度",
-
     "minTime": "最小时间",
     "maxTime": "最大时间",
     "corrected": "补正后",
@@ -76,7 +72,6 @@
     "finalSpeed": "终盘目标速度",
     "finalAccel": "终盘加速度",
     "none": "无",
-
     "remark1": "仅供参考。",
     "remark2": "背景灰色的部分是焦虑(挂かり)的区间、淡紫色是弯道。",
     "remark3": "储存的马娘可能因为资料结构改变而无法使用。",
@@ -85,10 +80,8 @@
     "remark6": "喰らう妨害技能一律以发动率80％计算。",
     "remark7": "因为适性并不会直接影响素质、故补正后的素质并不会显示在下方。",
     "remark8": "作者：砂井裏键。解包哥，永远的神。",
-
     "contact": "YouTube频道在此，请多赏光",
     "emulating": "模拟中、请稍候……",
-
     "randomPosition": "乱数区间",
     "randomPosition0": "随机",
     "randomPosition1": "最速",
@@ -96,40 +89,37 @@
     "randomPosition3": "1/2",
     "randomPosition4": "3/4",
     "randomPosition5": "最迟",
-
     "runningStyle1": "领头",
     "runningStyle2": "前列",
     "runningStyle3": "居中",
     "runningStyle4": "后追",
-
     "surfaceCondition1": "良好",
     "surfaceCondition2": "略差",
     "surfaceCondition3": "差",
     "surfaceCondition4": "极差",
-
     "mood0": "绝佳",
     "mood1": "良好",
     "mood2": "普通",
     "mood3": "不佳",
     "mood4": "极差",
-
     "uniqueLv0Hint": "（设定为 Lv0 则不会发动）",
     "evoSkill": "进化技能",
     "evoHint": "（选择固有技能后显示）",
-
     "leadCompetitionSpeed": "取位争夺增速",
     "leadCompetitionDuration": "秒数",
     "leadCompetitionAdvantage": "身距收益",
     "leadCompetitionHP": "耗耐",
-
     "simulateLeadCompetition": "模拟取位争夺",
     "simulatePositionKeeping": "模拟位置意识",
-
     "positionKeeping": {
       "none": "不使用",
       "nige": "一般领头",
       "oonige": "强势领头"
-    }
+    },
+    "from": "起点距离",
+    "to": "结束距离",
+    "skillName": "技能",
+    "skillRate": "技能发动率"
   },
   "emulatorType": {
     "teamRace": "竞技场",
@@ -211,5 +201,8 @@
   "systematicSkill": {
     "leadCompetition": "取位争夺",
     "rcp": "脚力十足"
+  },
+  "action": {
+    "update": "计算发生率"
   }
 }

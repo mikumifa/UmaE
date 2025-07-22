@@ -124,6 +124,39 @@
     </div>
 
 
+    <div class="max-w-md mx-0 my-4">
+      <div class="flex gap-2 items-center mb-2">
+        <label class="text-sm">{{ $t("message.from") }}:</label>
+        <input v-model.number="skillFrom" type="number" class="border px-2 py-1 w-20 text-xs">
+        <label class="text-sm">{{ $t("message.to") }}:</label>
+        <input v-model.number="skillTo" type="number" class="border px-2 py-1 w-20 text-xs">
+        <el-button @click="updateSkillRates" type="success">
+          {{ $t("action.update") }}
+        </el-button>
+
+      </div>
+
+      <table class="table-auto border border-gray-300 text-center text-xs w-full">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-4 py-2">{{ $t("message.skillName") }}</th>
+            <th class="border px-4 py-2">{{ $t("message.skillRate") }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="Object.keys(skillRates).length === 0">
+            <td class="border px-4 py-2 text-gray-400" colspan="2">暂无数据</td>
+          </tr>
+          <tr v-else v-for="(rate, name) in skillRates" :key="name">
+            <td class="border px-4 py-2">{{ name }}</td>
+            <td class="border px-4 py-2">{{ (rate * 100).toFixed(1) }}%</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+
 
 
     <!-- 逃げ or 大逃げ限定 -->
@@ -153,6 +186,13 @@
 <script>
 export default {
   name: "CalculatedValues",
+  data() {
+    return {
+      skillFrom: null,
+      skillTo: null,
+      skillRates: {},
+    };
+  },
   computed: {
     totalStatus() {
       return (
@@ -164,7 +204,19 @@ export default {
       );
     },
   },
+  watch: {
+    '$parent.ReleaseSkills': {
+      handler: 'updateSkillRates',
+      deep: true
+    }
+  },
   methods: {
+    updateSkillRates() {
+      const from = this.skillFrom != null ? this.skillFrom : 0;
+      const to = this.skillTo != null ? this.skillTo : 9999;
+      this.getSkillsRate(from, to);
+    },
+
     getEqualStamina(value) {
       return Math.floor(
         (this.$parent.spMax * value) /
@@ -172,6 +224,31 @@ export default {
         0.8 /
         this.$parent.styleSpCoef[this.$parent.runningStyle]
       );
+    },
+    getSkillsRate(from, to) {
+      const releaseSkills = this.$parent.ReleaseSkills;
+      const maxEpoch = this.$parent.maxEpoch
+      const fromInt = Math.round(from);
+      const toInt = Math.round(to);
+      const skillEpochMap = new Map();
+      for (const skill of releaseSkills) {
+        const roundedX = Math.round(skill.pos);
+        if (roundedX < fromInt || roundedX > toInt) continue;
+
+        const name = skill.data.name;
+        const epoch = skill.epoch;
+
+        if (!skillEpochMap.has(name)) {
+          skillEpochMap.set(name, new Set());
+        }
+        skillEpochMap.get(name).add(epoch);
+      }
+      const skillRateMap = {};
+      const sortedEntries = Array.from(skillEpochMap.entries()).sort(([a], [b]) => a.localeCompare(b));
+      for (const [name, epochs] of sortedEntries) {
+        skillRateMap[name] = epochs.size / maxEpoch;
+      }
+      this.skillRates = skillRateMap;
     },
     formatNumber(value, digits = 1, defaultValue = '-') {
       if (typeof value === 'number' && !isNaN(value)) {

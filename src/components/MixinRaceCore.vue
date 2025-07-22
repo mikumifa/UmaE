@@ -380,6 +380,9 @@ export default {
         this.distanceFitSpeedCoef[this.umaStatus.distanceFit]
       );
     },
+    ReleaseSkills() {
+      return this.releaseSkills
+    },
     vMin() {
       if (this.isStartDash) {
         return this.startSpeed;
@@ -1031,11 +1034,6 @@ export default {
       const raceTime = this.frameElapsed * this.frameLength - excessTime;
       const raceTimeDelta = raceTime - this.trackDetail.finishTimeMax / 1.18;
       this.updateChart();
-      if (this.$refs.executeBlock.epoch === this.maxEpoch - 1) {
-        console.log("emulations", this.emulations)
-
-      }
-
       const emu = {
         raceTime,
         raceTimeDelta,
@@ -1476,6 +1474,7 @@ export default {
               epoch: this.$refs.executeBlock.epoch,
               data: skill.data,
               x: label,
+              pos: frame.startPosition.toFixed(2)
             });
             nextSkillYAdjust(skillYAdjust);
           }
