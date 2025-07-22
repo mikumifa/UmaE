@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-sm w-full mx-auto my-4 rounded-2xl shadow-md bg-white dark:bg-gray-800 p-6">
+  <div class=" max-w-96 my-4 rounded-2xl shadow-md p-6">
     <!-- 各阶段速度/加速度 表格 -->
     <div class="max-w-md mx-0 my-4">
       <table class="table-auto border border-gray-300 text-center text-xs">

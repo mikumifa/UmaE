@@ -1,5 +1,6 @@
 <template>
-  <div class="max-w-sm w-full mx-auto my-4 rounded-2xl shadow-md bg-white dark:bg-gray-800 p-6">
+  <div class="max-w-96 my-4 rounded-2xl shadow-md p-6">
+
     <div class="flex items-center flex-wrap gap-2">
       <span class="font-semibold text-gray-700">{{ $t("chart.slope") }}：</span>
       <span v-for="slope in slopes" :key="slope"
