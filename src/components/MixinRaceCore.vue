@@ -9,11 +9,6 @@ import * as RCP from "./data/release_conserve_power_constants";
 import MixinKua from "@/components/MixinKua.vue";
 const UMA_OBJ_VERSION = 2;
 
-// let timer = 0;
-// function pf(memo) {
-//   console.log(memo, `${Date.now() - timer} ms.`);
-//   timer = Date.now();
-// }
 
 export default {
   name: "MixinRaceCore",
@@ -62,6 +57,7 @@ export default {
       currentSpeed: null,
       sp: 0,
       operatingSkills: [],
+      releaseSkills: [],
       frames: [],
       startDelay: 0,
       isStartDash: false,
@@ -90,6 +86,7 @@ export default {
         downSlopeProbAccumulator: 0,
         downSlopeEndProbAccumulator: 0,
       },
+      //技能热点图
     };
   },
   mounted() {
@@ -573,6 +570,7 @@ export default {
     exec(maxEpoch) {
       this.fullFillStatus();
       this.emulations = [];
+      this.releaseSkills = [];
       this.maxEpoch = maxEpoch;
       this.progressEpoch();
     },
@@ -658,6 +656,7 @@ export default {
       this.weather = -1;
       this.oonige = false;
       this.leadCompetitionUsage = 0;
+
       this.resetPositionKeeping();
     },
     initCondition() {
@@ -1031,9 +1030,10 @@ export default {
         (this.position - this.courseLength) / this.currentSpeed;
       const raceTime = this.frameElapsed * this.frameLength - excessTime;
       const raceTimeDelta = raceTime - this.trackDetail.finishTimeMax / 1.18;
-
+      this.updateChart();
       if (this.$refs.executeBlock.epoch === this.maxEpoch - 1) {
-        this.updateChart();
+        console.log("emulations", this.emulations)
+
       }
 
       const emu = {
@@ -1425,6 +1425,7 @@ export default {
       let upSlopeStart = -1;
       let downSlopeStart = -1;
       // const step = Math.floor(this.frames.length / 500)
+
       const step = 1;
       for (let index = 0; index < this.frames.length; index += step) {
         const frame = this.frames[index];
@@ -1460,16 +1461,21 @@ export default {
                       thiz.$message(
                         `耐力${skill.detail.heal.toFixed(
                           1
-                        )}回復(${skill.detail.waste.toFixed(1)}が溢れた)`
+                        )}回复溢出${skill.detail.waste.toFixed(1)}`
                       );
                     } else {
-                      thiz.$message(`耐力${skill.detail.heal.toFixed(1)}回復`);
+                      thiz.$message(`耐力回复${skill.detail.heal.toFixed(1)}`);
                     }
                   } else if ("extended" in skill.detail) {
                     thiz.$message(`x${skill.detail.extended}`);
                   }
                 }
               },
+            });
+            this.releaseSkills.push({
+              epoch: this.$refs.executeBlock.epoch,
+              data: skill.data,
+              x: label,
             });
             nextSkillYAdjust(skillYAdjust);
           }
@@ -1666,6 +1672,39 @@ export default {
         }
       }
 
+
+      const colorMap = new Map();
+
+      function getColorForName(name) {
+        if (!colorMap.has(name)) {
+          const color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`;
+          colorMap.set(name, color);
+        }
+        return colorMap.get(name);
+      }
+
+      const skillMap = new Map();
+
+      for (const s of this.releaseSkills) {
+        const name = s.data.name;
+
+        if (!skillMap.has(name)) {
+          skillMap.set(name, {
+            type: "scatter",
+            label: name,
+            yAxisID: "epoch",
+            data: [],
+            backgroundColor: getColorForName(name),
+            pointRadius: 4,
+            hidden: true, // 默认隐藏
+          });
+        }
+
+        skillMap.get(name).data.push({ x: s.x, y: s.epoch });
+      }
+
+      const skillDatasets = Array.from(skillMap.values());
+
       this.chartOptions = {
         annotation: {
           drawTime: "afterDatasetsDraw",
@@ -1703,6 +1742,15 @@ export default {
               ticks: {
                 min: -this.courseLength / 10,
               },
+            }, {
+              id: "epoch",
+              type: "linear",
+              display: false, // ← 不显示这个坐标轴
+              ticks: {
+                stepSize: 1,
+                precision: 0,
+              },
+
             },
           ],
         },
@@ -1732,6 +1780,8 @@ export default {
             borderColor: "rgb(215, 255, 215)",
             data: dataPosition,
           },
+
+          ...skillDatasets,
         ],
       };
     },

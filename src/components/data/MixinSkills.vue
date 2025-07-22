@@ -164,7 +164,6 @@ export default {
       if (this.$i18n.locale === "ja") {
         return origin;
       }
-      console.log(origin)
       for (const skillWrapper of origin) {
         for (const variant of skillWrapper.variants) {
           this.localizeSkill(variant, skillWrapper, newSkillNames);
@@ -283,28 +282,33 @@ export default {
           }
           continue;
         }
-
         if (!this.isDistanceType(skill.conditions?.distance_type)) {
           continue;
         }
         if (!this.isRunningStyle(skill.conditions?.running_style)) {
           continue;
         }
+
         if (!this.isGroundType(skill.conditions?.ground_type)) {
           continue;
         }
+
         if (!this.isRotation(skill.conditions?.rotation)) {
           continue;
         }
+
         if (!this.isTrackId(skill.conditions?.track_id)) {
           continue;
         }
+
         if (!this.isBasisDistance(skill.conditions?.is_basis_distance)) {
           continue;
         }
+
         if (!this.isGroundCondition(skill.conditions?.ground_condition)) {
           continue;
         }
+
         // コースと馬場状態指定はチャンミのみ
         if (this.emulatorType === "cm") {
           if (skill.courseLimit) {
@@ -1385,7 +1389,6 @@ export default {
         newSkillNames[jaName] = "";
       }
       skill.name = localName && !localName.startsWith("skill.") ? localName : jaName;
-
       const tooltipKey = `tooltip.${skill.id}`;
       if (this.$te(tooltipKey)) {
         if (wrapper) {

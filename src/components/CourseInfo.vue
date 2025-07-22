@@ -3,7 +3,7 @@
     <div class="flex items-center flex-wrap gap-2">
       <span class="font-semibold text-gray-700">{{ $t("chart.slope") }}：</span>
       <span v-for="slope in slopes" :key="slope"
-        :class="['box px-2 py-1 rounded  text-white text-xs font-semibold', slopeClass(slope)]">
+        :class="['box px-2 py-1 rounded  text-xs font-semibold', slopeClass(slope)]">
         {{ slope }}
       </span>
     </div>
@@ -11,7 +11,7 @@
     <div class="flex items-center flex-wrap gap-2">
       <span class="font-semibold text-gray-700">{{ $t("chart.corner") }}：</span>
       <span v-for="corner in corners" :key="corner"
-        class="box corner px-2 py-1 rounded bg-blue-500 text-white text-xs font-semibold">
+        class="box corner px-2 py-1 rounded bg-blue-500 text-xs font-semibold">
         {{ corner }}
       </span>
     </div>
@@ -19,7 +19,7 @@
     <div class="flex items-center flex-wrap gap-2">
       <span class="font-semibold text-gray-700">{{ $t("chart.straight") }}：</span>
       <span v-for="straight in straights" :key="straight"
-        class="box straight px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold">
+        class="box straight px-2 py-1 rounded bg-green-500 text-xs font-semibold">
         {{ straight }}
       </span>
     </div>
@@ -39,18 +39,18 @@
     <div class="flex items-center flex-wrap gap-4 text-gray-600">
       <span class="font-semibold text-gray-700">
         {{ $t("message.displayStatusCheck") }}：
-        <span class="box straight px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold">{{ displayStatusCheck
+        <span class="box straight px-2 py-1 rounded bg-green-500 text-xs font-semibold">{{ displayStatusCheck
         }}</span>
       </span>
       <span class="font-semibold text-gray-700">
         {{ $t("message.minTime") }}：
-        <span class="box straight px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold">
+        <span class="box straight px-2 py-1 rounded bg-green-500  text-xs font-semibold">
           {{ formatTime($parent.trackDetail.finishTimeMin, 1) }}
         </span>
       </span>
       <span class="font-semibold text-gray-700">
         ／{{ $t("message.maxTime") }}：
-        <span class="box straight px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold">
+        <span class="box straight px-2 py-1 rounded bg-green-500 text-xs font-semibold">
           {{ formatTime($parent.trackDetail.finishTimeMax, 1) }}
         </span>
       </span>

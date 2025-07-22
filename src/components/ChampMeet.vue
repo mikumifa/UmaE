@@ -269,22 +269,24 @@
         </table>
       </div>
     </div>
-    <div class="space-y-6">
+
+    <div class="bg-white p-4 rounded-lg shadow-md">
       <h3 class="text-xl font-semibold text-gray-800">
         {{ $t("message.latestRaceTime") }} ({{ formatTime(latestRaceTime, 3) }})
       </h3>
       <chart-hint />
-
-      <div class="bg-white p-4 rounded-lg shadow-md">
-        <race-graph :chart-data="chartData" :options="chartOptions" />
-      </div>
-
-      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-        <course-info :track="track" />
-      </div>
+      <race-graph :chart-data="chartData" :options="chartOptions" />
     </div>
 
-    <calculated-values />
+
+
+    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+      <course-info :track="track" />
+    </div>
+    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+      <calculated-values />
+    </div>
+
     <el-divider />
     <release-note />
     <h3>注意事項</h3>
