@@ -50,7 +50,7 @@
         </span>
       </span>
       <span class="font-semibold text-gray-700">
-        ／{{ $t("message.maxTime") }}：
+        {{ $t("message.maxTime") }}：
         <span class="box straight px-2 py-1 rounded bg-green-500 text-xs font-semibold">
           {{ formatTime($parent.trackDetail.finishTimeMax, 1) }}
         </span>

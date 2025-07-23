@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="max-w-96 rounded-2xl  p-6">
     <el-form-item>
       <el-button @click="executeIndicated" type="success">
         {{ $t("message.emulateStart") }}

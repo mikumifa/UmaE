@@ -116,7 +116,8 @@
       "nige": "一般領頭",
       "oonige": "強勢領頭"
     },
-    "skillName": "技能发动率"
+    "skillName": "技能发动率",
+    "noData": "无技能"
   },
   "emulatorType": {
     "teamRace": "競技場",

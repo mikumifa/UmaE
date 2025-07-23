@@ -1,3 +1,4 @@
+
 local p={}
 p.text_data_4={
 {id="4",category="4",index="100101",text_JP="[スペシャルドリーマー]スペシャルウィーク",text_TW="[特別夢想家]特別週",text_CN="[特别追梦者]特别周"},

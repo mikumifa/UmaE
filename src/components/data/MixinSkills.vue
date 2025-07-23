@@ -1,6 +1,6 @@
 <script>
 import * as RCP from "@/components/data/release_conserve_power_constants";
-
+import skillDetails from '@/components/data/skillDetail_cn.json'
 const SkillData = require("./skillData");
 
 const effects = [
@@ -126,6 +126,7 @@ export default {
         inherit: "skills.inherit",
         all: "",
       },
+      skillDetails,
       invokedSkills: [],
       coolDownMap: {},
       hasSkills: {},
@@ -1389,15 +1390,23 @@ export default {
         newSkillNames[jaName] = "";
       }
       skill.name = localName && !localName.startsWith("skill.") ? localName : jaName;
-      const tooltipKey = `tooltip.${skill.id}`;
-      if (this.$te(tooltipKey)) {
-        if (wrapper) {
-          wrapper.tooltip = this.$t(tooltipKey);
+      if (skill.have) {
+        const detail = skillDetails[skill.name];
+        if (detail) {
+          skill.tooltip = `${detail.description || ""}${detail.trigger_desc ? "\n" + detail.trigger_desc : ""}`;
         } else {
-          skill.tooltip = this.$t(tooltipKey);
+          console.error(`No skill detail found for ${skill.name}`);
+        }
+      } else {
+        const tooltipKey = `tooltip.${skill.id}`;
+        if (this.$te(tooltipKey)) {
+          if (wrapper) {
+            wrapper.tooltip = this.$t(tooltipKey);
+          } else {
+            skill.tooltip = this.$t(tooltipKey);
+          }
         }
       }
-
       return skill;
     },
   },

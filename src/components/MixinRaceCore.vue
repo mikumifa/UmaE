@@ -58,6 +58,7 @@ export default {
       sp: 0,
       operatingSkills: [],
       releaseSkills: [],
+      skillPosDatasets: [],
       frames: [],
       startDelay: 0,
       isStartDash: false,
@@ -75,6 +76,7 @@ export default {
       umaToLoad: null,
       chartData: {},
       chartOptions: {},
+      skillChartOptions: {},
       // Constants
       fitRanks: ["S", "A", "B", "C", "D", "E", "F", "G"],
       // Special cases
@@ -574,6 +576,7 @@ export default {
       this.fullFillStatus();
       this.emulations = [];
       this.releaseSkills = [];
+      this.skillPosDatasets = [];
       this.maxEpoch = maxEpoch;
       this.progressEpoch();
     },
@@ -1033,7 +1036,8 @@ export default {
         (this.position - this.courseLength) / this.currentSpeed;
       const raceTime = this.frameElapsed * this.frameLength - excessTime;
       const raceTimeDelta = raceTime - this.trackDetail.finishTimeMax / 1.18;
-      this.updateChart();
+      this.updateChart(this.$refs.executeBlock.epoch === this.maxEpoch - 1);
+
       const emu = {
         raceTime,
         raceTimeDelta,
@@ -1346,13 +1350,16 @@ export default {
       this.umaToLoad = null;
       this.savedUmas = JSON.parse(localStorage.getItem("umas"));
     },
-    updateChart() {
+    updateChart(ishow = false) {
       const thiz = this;
       const labels = [];
       const dataSpeed = [];
       const dataSp = [];
       const dataPosition = [];
       const annotations = [];
+      const markLinesAnn = [];
+      const areasAnntatons = []
+
       let skillYAdjust = 0;
       const nextSkillYAdjust = function () {
         skillYAdjust += 25;
@@ -1419,9 +1426,16 @@ export default {
 
       let cornerIndex = 0;
       let cornerStart = -1;
+      let cornerStartPos = -1;
       let straightStart = -1;
+      let straightStartPos = -1;
+
       let upSlopeStart = -1;
+      let upSlopeStartPos = -1;
+
       let downSlopeStart = -1;
+      let downSlopeStartPos = -1;
+
       // const step = Math.floor(this.frames.length / 500)
 
       const step = 1;
@@ -1486,6 +1500,9 @@ export default {
             )
           ) {
             cornerStart = index;
+            cornerStartPos = this.frames[index].startPosition;
+
+
           } else if (
             this.isInCorner(this.frames[index].startPosition) &&
             !this.isInCorner(
@@ -1503,6 +1520,14 @@ export default {
               backgroundColor: "rgba(225, 190, 255, 0.2)",
               drawTime: "beforeDatasetsDraw",
             });
+            areasAnntatons.push({
+              name: "弯道",
+              xMin: cornerStartPos,
+              xMax: this.frames[index].startPosition,
+              yMin: 0,
+              yMax: this.maxEpoch / 2,
+              color: 'rgba(225, 190, 255, 0.2)',
+            });
             cornerIndex++;
             if (cornerIndex >= 3) {
               cornerIndex = 0;
@@ -1517,6 +1542,7 @@ export default {
           )
         ) {
           straightStart = index;
+          straightStartPos = this.frames[index].startPosition
         } else if (
           this.isInStraight(this.frames[index].startPosition) &&
           !this.isInStraight(
@@ -1534,6 +1560,15 @@ export default {
             backgroundColor: "rgba(210, 235, 255, 0.2)",
             drawTime: "beforeDatasetsDraw",
           });
+
+          areasAnntatons.push({
+            name: "直线",
+            xMin: straightStartPos,
+            xMax: this.frames[index].startPosition,
+            yMin: 0,
+            yMax: this.maxEpoch / 2,
+            color: "rgba(210, 235, 255, 0.2)",
+          });
         }
         // 上り坂
         if (
@@ -1544,6 +1579,8 @@ export default {
           )
         ) {
           upSlopeStart = index;
+          upSlopeStartPos = this.frames[index].startPosition;
+
         } else if (
           this.isInSlope("up", this.frames[index].startPosition) &&
           !this.isInSlope(
@@ -1562,6 +1599,15 @@ export default {
             backgroundColor: "rgba(240, 235, 105, 0.2)",
             drawTime: "beforeDatasetsDraw",
           });
+
+          areasAnntatons.push({
+            name: "上坡",
+            xMin: upSlopeStartPos,
+            xMax: this.frames[index].startPosition,
+            yMin: this.maxEpoch / 2,
+            yMax: this.maxEpoch,
+            color: 'rgba(240, 235, 105, 0.2)',
+          });
         }
         // 下り坂
         if (
@@ -1572,6 +1618,7 @@ export default {
           )
         ) {
           downSlopeStart = index;
+          downSlopeStartPos = this.frames[index].startPosition;
         } else if (
           this.isInSlope("down", this.frames[index].startPosition) &&
           !this.isInSlope(
@@ -1589,6 +1636,14 @@ export default {
             yScaleID: "position",
             backgroundColor: "rgba(125, 255, 190, 0.15)",
             drawTime: "beforeDatasetsDraw",
+          });
+          areasAnntatons.push({
+            name: "下坡",
+            xMin: downSlopeStartPos,
+            xMax: this.frames[index].startPosition,
+            yMin: this.maxEpoch / 2,
+            yMax: this.maxEpoch,
+            color: "rgba(125, 255, 190, 0.15)",
           });
         }
 
@@ -1611,6 +1666,25 @@ export default {
               borderWidth: 2,
               onClick: function () { },
             });
+            markLinesAnn.push({
+              symbol: ['none', 'none'],
+              label: { show: true },
+              data: [
+                {
+                  xAxis: frame.startPosition,
+                  label: {
+                    formatter: PHASE_NAMES[phase],
+                    color: "black",
+                    fontWeight: 'bold',
+                    position: 'insideEndBottom',
+                  },
+                  lineStyle: {
+                    color: 'black',
+                    width: 2,
+                  },
+                }
+              ]
+            });
           }
           if (
             this.getSection(this.frames[index + step].startPosition) === 10 &&
@@ -1629,6 +1703,25 @@ export default {
               borderColor: "darkgreen",
               borderWidth: 2,
               onClick: function () { },
+            });
+
+            markLinesAnn.push({
+              symbol: ['none', 'none'],
+              label: { show: true },
+              data: [
+                {
+                  xAxis: frame.startPosition,
+                  label: {
+                    formatter: this.$t("chart.positionKeepEnd"),
+                    color: "darkgreen",
+                    fontWeight: 'bold',
+                  },
+                  lineStyle: {
+                    color: "darkgreen",
+                    width: 2,
+                  },
+                }
+              ]
             });
           }
           const isInFinalCorner = this.isInFinalCorner(
@@ -1649,6 +1742,25 @@ export default {
               borderColor: "maroon",
               borderWidth: 2,
             });
+
+            markLinesAnn.push({
+              symbol: ['none', 'none'],
+              label: { show: true },
+              data: [
+                {
+                  xAxis: frame.startPosition,
+                  label: {
+                    formatter: this.$t("chart.finalCorner"),
+                    color: "maroon",
+                    fontWeight: 'bold',
+                  },
+                  lineStyle: {
+                    color: "maroon",
+                    width: 2,
+                  },
+                }
+              ]
+            });
             nextSkillYAdjust(skillYAdjust);
           }
           if (!frame.spurting && this.frames[index + step].spurting) {
@@ -1667,6 +1779,25 @@ export default {
               borderWidth: 2,
               onClick: function () { },
             });
+
+            markLinesAnn.push({
+              symbol: ['none', 'none'],
+              label: { show: true },
+              data: [
+                {
+                  xAxis: frame.startPosition,
+                  label: {
+                    formatter: this.$t("chart.spurt"),
+                    color: "red",
+                    fontWeight: 'bold',
+                  },
+                  lineStyle: {
+                    color: "red",
+                    width: 2,
+                  },
+                }
+              ]
+            });
           }
         }
       }
@@ -1682,107 +1813,228 @@ export default {
         return colorMap.get(name);
       }
 
-      const skillMap = new Map();
 
-      for (const s of this.releaseSkills) {
-        const name = s.data.name;
+      if (ishow) {
+        const skillTimeMap = new Map();
+        const skillPosMap = new Map();
 
-        if (!skillMap.has(name)) {
-          skillMap.set(name, {
-            type: "scatter",
-            label: name,
-            yAxisID: "epoch",
-            data: [],
-            backgroundColor: getColorForName(name),
-            pointRadius: 4,
-            hidden: true, // 默认隐藏
-          });
+        for (const s of this.releaseSkills) {
+          const name = s.data.name;
+
+          if (!skillTimeMap.has(name)) {
+            skillTimeMap.set(name, {
+              type: "scatter",
+              label: name,
+              yAxisID: "epoch",
+              data: [],
+              backgroundColor: getColorForName(name),
+              pointRadius: 4,
+              hidden: true, // 默认隐藏
+            });
+            skillPosMap.set(name, {
+              name: name,
+              type: 'scatter',
+              symbolSize: 10,
+              itemStyle: {
+                color: getColorForName(name),
+              },
+              data: [],
+            });
+          }
+
+          skillTimeMap.get(name).data.push({ x: s.x, y: s.epoch });
+          skillPosMap.get(name).data.push([parseFloat(s.pos), s.epoch]);
+
         }
 
-        skillMap.get(name).data.push({ x: s.x, y: s.epoch });
-      }
+        const skillDatasets = Array.from(skillTimeMap.values());
+        const skillPosDatasets = Array.from(skillPosMap.values());
 
-      const skillDatasets = Array.from(skillMap.values());
-
-      this.chartOptions = {
-        annotation: {
-          drawTime: "afterDatasetsDraw",
-          events: ["click"],
-          annotations,
-        },
-        elements: {
-          point: {
-            radius: 0,
+        this.chartOptions = {
+          annotation: {
+            drawTime: "afterDatasetsDraw",
+            events: ["click"],
+            annotations,
           },
-        },
-        scales: {
-          yAxes: [
-            {
-              id: "sp",
-              type: "linear",
-              position: "left",
-              ticks: {
-                min: 0,
+          elements: {
+            point: {
+              radius: 0,
+            },
+          },
+          scales: {
+            yAxes: [
+              {
+                id: "sp",
+                type: "linear",
+                position: "left",
+                ticks: {
+                  min: 0,
+                },
               },
+              {
+                id: "speed",
+                type: "linear",
+                position: "right",
+                ticks: {
+                  min: 15,
+                  max: 27,
+                },
+              },
+              {
+                id: "position",
+                type: "linear",
+                position: "right",
+                ticks: {
+                  min: -this.courseLength / 10,
+                },
+              },
+              {
+                id: "epoch",
+                type: "linear",
+                display: false, // ← 不显示这个坐标轴
+                ticks: {
+                  stepSize: 1,
+                  precision: 0,
+                },
+              },
+            ],
+          },
+          maintainAspectRatio: false,
+        };
+        this.chartData = {
+          labels: labels,
+          datasets: [
+            {
+              fill: false,
+              label: this.$t("chart.hp"),
+              yAxisID: "sp",
+              borderColor: "rgb(255, 132, 99)",
+              data: dataSp,
             },
             {
-              id: "speed",
-              type: "linear",
-              position: "right",
-              ticks: {
-                min: 15,
-                max: 27,
-              },
+              fill: false,
+              label: this.$t("chart.speed"),
+              yAxisID: "speed",
+              borderColor: "rgb(30, 21, 155)",
+              data: dataSpeed,
             },
             {
-              id: "position",
-              type: "linear",
-              position: "right",
-              ticks: {
-                min: -this.courseLength / 10,
-              },
-            }, {
-              id: "epoch",
-              type: "linear",
-              display: false, // ← 不显示这个坐标轴
-              ticks: {
-                stepSize: 1,
-                precision: 0,
-              },
+              fill: false,
+              label: this.$t("chart.position"),
+              yAxisID: "position",
+              borderColor: "rgb(215, 255, 215)",
+              data: dataPosition,
+            },
 
-            },
+            ...skillDatasets,
           ],
-        },
-        maintainAspectRatio: false,
-      };
-      this.chartData = {
-        labels: labels,
-        datasets: [
-          {
-            fill: false,
-            label: this.$t("chart.hp"),
-            yAxisID: "sp",
-            borderColor: "rgb(255, 132, 99)",
-            data: dataSp,
-          },
-          {
-            fill: false,
-            label: this.$t("chart.speed"),
-            yAxisID: "speed",
-            borderColor: "rgb(30, 21, 155)",
-            data: dataSpeed,
-          },
-          {
-            fill: false,
-            label: this.$t("chart.position"),
-            yAxisID: "position",
-            borderColor: "rgb(215, 255, 215)",
-            data: dataPosition,
-          },
+        };
+        const series = []
+        const areas = areasAnntatons.map(area => this.convertToMarkArea(area))
+        series.push(...areas)
+        const lines = markLinesAnn.map(area => this.convertToMarkLines(area))
+        series.push(...lines);
+        series.push(...skillPosDatasets);
+        this.skillPosDatasets = skillPosDatasets
 
-          ...skillDatasets,
-        ],
-      };
+        this.skillChartOptions = {
+          title: [
+            {
+              text: '技能统计',
+              x: 'center',      //可设定图例在左、右、居中
+              y: 'top',     //可设定图例在上、下、居中
+            }
+          ],
+          legend: {
+            show: true,
+            type: 'scroll',
+            orient: 'vertical',
+            x: 'right',      //可设定图例在左、右、居中
+            y: 'center',     //可设定图例在上、下、居中
+            padding: [0, 50, 0, 0],   //可设定图例[距上方距离，距右
+            data: series.filter(item => item.name).map(item => item.name),
+            selected: Object.fromEntries(
+              skillPosDatasets
+                .filter(item => item.name)
+                .map(item => [item.name, false])
+            )
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          dataZoom: [
+            {
+              xAxisIndex: 0,
+              start: 0,
+              end: 100
+            }
+          ],
+          xAxis: [
+            {
+              type: 'value',
+              gridIndex: 0,
+              name: '距离(m)',
+              min: 0,
+              max: this.courseLength
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              name: '轮次',
+              min: 0,
+              max: this.maxEpoch,
+              gridIndex: 0
+            }
+          ],
+          series: series, // 直接使用你的数组！
+        };
+      }
+    },
+    darkenColor(color, factor = 0.6) {
+      const rgba = color.match(/rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/);
+      if (!rgba) return '#000';
+      const [r, g, b] = rgba.slice(1, 4).map(n => Math.max(0, Math.floor(n * factor)));
+      return `rgb(${r}, ${g}, ${b})`;
+    },
+    convertToMarkArea(areas) {
+      return {
+        name: areas.name,
+        type: 'bar',
+        markArea: {
+          itemStyle: {
+            color: areas.color,
+          },
+          label: {
+            show: true,
+            color: this.darkenColor(areas.color, 0.6), // 使用稍深的颜色
+            fontWeight: 'bold',
+          },
+          data: [
+            [
+              {
+                name: areas.name,
+                xAxis: areas.xMin,
+                yAxis: areas.yMin
+              },
+              {
+                xAxis: areas.xMax,
+                yAxis: areas.yMax
+              }
+            ]
+          ]
+        }
+      }
+    },
+    convertToMarkLines(areas) {
+      return {
+        name: areas.name,
+        type: 'line',
+        markLine: areas
+      }
     },
     getPhase(position) {
       if (position < this.trackDetail.distance / 6.0) {
