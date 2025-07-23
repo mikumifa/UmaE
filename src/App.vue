@@ -34,7 +34,7 @@ export default {
     fetch('/build-time.txt')
       .then(res => res.text())
       .then(time => {
-        this.buildTime = new Date(time).toLocaleString()
+        this.buildTime = time
       })
       .catch(() => {
         this.buildTime = '未知'

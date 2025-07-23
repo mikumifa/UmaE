@@ -55,6 +55,8 @@ export default {
             handler(newVal, _) {
                 console.log('skillChartOptions changed:', newVal);
                 this.updateSkillRates();
+                this.chart.setOption(this.$parent.$parent.skillChartOptions);
+
             },
             deep: true
         },
@@ -73,7 +75,6 @@ export default {
             this.getSkillsRate(from, to);
             this.skillChartOptions = this.$parent.$parent.skillChartOptions;
             this.skillPosDatasets = this.$parent.$parent.skillPosDatasets;
-            this.chart.setOption(this.$parent.$parent.skillChartOptions);
         },
         getSkillsRate(from, to) {
             const releaseSkills = this.$parent.$parent.ReleaseSkills;

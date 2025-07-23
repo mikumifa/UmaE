@@ -119,7 +119,8 @@
     "from": "起",
     "to": "终",
     "skillName": "技能",
-    "skillRate": "技能发动率"
+    "skillRate": "技能发动率",
+    "noData": "无技能"
   },
   "emulatorType": {
     "teamRace": "竞技场",
