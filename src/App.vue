@@ -31,10 +31,10 @@ export default {
     };
   },
   created() {
-    fetch('/build-time.txt')
+    fetch('./build-time.txt')
       .then(res => res.text())
       .then(time => {
-        this.buildTime = time
+        this.buildTime = new Date(time).toLocaleString()
       })
       .catch(() => {
         this.buildTime = '未知'
