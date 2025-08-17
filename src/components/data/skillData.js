@@ -6770,74 +6770,49 @@ function normalSkillData(thiz) {
 
 const uniqueSkillData = (thiz) => [
   {
-    name: "なし／発動しない",
+    id: 0,
+    name: "  なし／発動しない",
     noInherit: true,
     check: function () {
       return false;
     },
   },
   {
-    id: 10321,
-    name: "introduction：My body",
-    noInherit: true,
-    heal: 350,
-    tooltip: "順位条件の>=3＆<=40%は満たしていると見なす",
-    check: function () {
-      return (
-        thiz.position >= thiz.courseLength / 2.0 &&
-        thiz.isInCorner(thiz.position)
-      );
-    },
-  },
-  {
     id: 100321,
+    holder: 103201,
     name: "U=ma2",
     heal: 550,
-    tooltip: "順位条件の>=3＆<=40%は満たしていると見なす",
+    duration: 4,
+    targetSpeed: 0.25,
+    tooltip: "3～4位(<=40%)",
     check: function () {
       return (
         thiz.position >= thiz.courseLength / 2.0 &&
         thiz.isInCorner(thiz.position)
       );
-    },
-  },
-  {
-    id: 10451,
-    name: "クリアハート",
-    noInherit: true,
-    heal: 350,
-    tooltip: "順位条件の>=2＆<=40%は満たしていると見なす",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(1);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
     },
   },
   {
     id: 100451,
+    holder: 104501,
     name: "ピュリティオブハート",
     heal: 750,
     tooltip: "2～4位(<=40%)",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(1);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
+    conditions: { phase_random: 1 },
   },
-  {
-    id: 10521,
-    name: "ワクワクよーいドン",
-    noInherit: true,
-    heal: 350,
-    tooltip: "近くにウマ娘がいる＆順位<=50%は満たしていると見なす",
-    check: function () {
-      return thiz.isInFinalCorner();
-    },
-  },
+  // {
+  //   id: 10521,
+  //   name: "ワクワクよーいドン",
+  //   noInherit: true,
+  //   heal: 350,
+  //   tooltip: "近くにウマ娘がいる＆順位<=50%は満たしていると見なす",
+  //   check: function () {
+  //     return thiz.isInFinalCorner();
+  //   },
+  // },
   {
     id: 100521,
+    holder: 105201,
     name: "ワクワククライマックス",
     heal: 550,
     tooltip: "近くにウマ娘がいる＆順位<=50%は満たしていると見なす",
@@ -6847,18 +6822,15 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 110111,
+    holder: 101102,
     name: "ゲインヒール・スペリアー",
     heal: 750,
     tooltip: "中盤のどこかで発動として見なす。",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(1);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
+    conditions: { phase_random: 1 },
   },
   {
     id: 110011,
+    holder: 100102,
     name: "わやかわ♪マリンダイヴ",
     heal: 550,
     check: function () {
@@ -6866,33 +6838,33 @@ const uniqueSkillData = (thiz) => [
     },
   },
   {
-    id: 0,
+    id: 110301,
+    holder: 103002,
     name: "Drain for rose",
     heal: 550,
-    tooltip: "50%地点で即発動として扱う。",
-    check: function (startPosition) {
-      return thiz.isContainsRemainingDistance(
-        thiz.courseLength * 0.5,
-        startPosition
-      );
+    targetSpeed: 0.25,
+    duration: 5,
+    conditions: {
+      phase: 1,
     },
   },
-  {
-    id: 10071,
-    name: "波乱注意砲！",
-    noInherit: true,
-    targetSpeed: 0.15,
-    duration: 6,
-    tooltip: "順位条件の<=50%は満たしていると見なす",
-    check: function () {
-      return (
-        thiz.position >= thiz.courseLength * 0.5 &&
-        thiz.position <= thiz.courseLength * 0.6
-      );
-    },
-  },
+  // {
+  //   id: 10071,
+  //   name: "波乱注意砲！",
+  //   noInherit: true,
+  //   targetSpeed: 0.15,
+  //   duration: 6,
+  //   tooltip: "順位条件の<=50%は満たしていると見なす",
+  //   check: function () {
+  //     return (
+  //       thiz.position >= thiz.courseLength * 0.5 &&
+  //       thiz.position <= thiz.courseLength * 0.6
+  //     );
+  //   },
+  // },
   {
     id: 100071,
+    holder: 100701,
     name: "不沈艦、抜錨ォッ！",
     targetSpeed: 0.25,
     duration: 6,
@@ -6906,57 +6878,71 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100131,
+    holder: 101301,
     name: "貴顕の使命を果たすべく",
-    targetSpeed: 0.35,
     duration: 5,
-    tooltip: "位置<=30%は満たしていると見なす。",
-    check: function () {
-      return thiz.isInFinalCorner() || thiz.isInFinalStraight();
-    },
+    type: "speed",
+    invokes: [
+      {
+        targetSpeed: 0.45,
+        conditions: {
+          is_finalcorner: 1,
+          corner: 1,
+          distance_type: 4,
+          lastspurt: 2,
+        },
+      },
+      {
+        targetSpeed: 0.35,
+        conditions: {
+          is_finalcorner: 1,
+          corner: 1,
+        },
+      },
+    ],
   },
   {
     id: 100261,
-    name: "G00 1st.F∞;",
-    targetSpeed: 0.35,
+    holder: 102601,
+    name: "G00 1st．F∞;",
+    targetSpeed: 0.45,
     duration: 5,
-    check: function () {
-      return (
-        thiz.temptationModeStart == null &&
-        thiz.startDelay < 0.08 &&
-        thiz.isInFinalStraight()
-      );
+    conditions: {
+      is_badstart: 0,
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
     id: 110131,
+    holder: 101302,
     name: "最強の名を懸けて",
     targetSpeed: 0.35,
-    duration: 5,
+    duration: 6,
+    conditions: {
+      phase: ">=2",
+      is_finalcorner: 1,
+    },
     tooltip: "「最終直線のどこか」として扱う。",
-    init: function () {
-      this.randoms = thiz.initFinalStraightRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
   },
-  {
-    id: 10081,
-    name: "アクセルX",
-    noInherit: true,
-    targetSpeed: 0.25,
-    duration: 5,
-    tooltip:
-      "「他面倒くさいの全部満たしたと見なして200mで発動する」として扱う。",
-    check: function (startPosition) {
-      return (
-        startPosition <= thiz.toPosition(200) &&
-        thiz.position >= thiz.toPosition(200)
-      );
-    },
-  },
+  // {
+  //   id: 10081,
+  //   name: "アクセルX",
+  //   noInherit: true,
+  //   targetSpeed: 0.25,
+  //   duration: 5,
+  //   tooltip:
+  //     "「他面倒くさいの全部満たしたと見なして200mで発動する」として扱う。",
+  //   check: function (startPosition) {
+  //     return (
+  //       startPosition <= thiz.toPosition(200) &&
+  //       thiz.position >= thiz.toPosition(200)
+  //     );
+  //   },
+  // },
   {
     id: 100081,
+    holder: 100801,
     name: "カッティング×DRIVE！",
     targetSpeed: 0.35,
     duration: 5,
@@ -6971,6 +6957,7 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100061,
+    holder: 100601,
     name: "勝利の鼓動",
     targetSpeed: 0.45,
     duration: 5,
@@ -6984,6 +6971,7 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100171,
+    holder: 101701,
     name: "汝、皇帝の神威を見よ",
     targetSpeed: 0.45,
     duration: 5,
@@ -6993,191 +6981,127 @@ const uniqueSkillData = (thiz) => [
     },
   },
   {
-    id: 10181,
-    name: "エンプレス・プライド",
-    noInherit: true,
-    targetSpeed: 0.25,
-    duration: 5,
-    tooltip:
-      "他面倒くさいの全部満たしたと見なし「最終コーナーのどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
-  },
-  {
     id: 100181,
+    holder: 101801,
     name: "ブレイズ・オブ・プライド",
     targetSpeed: 0.35,
     duration: 5,
+    conditions: {
+      is_finalcorner: 1,
+      corner: 1,
+    },
     tooltip:
       "他面倒くさいの全部満たしたと見なし「最終コーナーのどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
-  },
-  {
-    id: 10351,
-    name: "全力Vサインッ！",
-    noInherit: true,
-    targetSpeed: 0.25,
-    duration: 5,
-    tooltip:
-      "他面倒くさいの全部満たしたと見なし「最終直線のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initFinalStraightRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
   },
   {
     id: 100351,
+    holder: 103501,
     name: "勝利のチケットを、君にッ！",
     targetSpeed: 0.35,
     duration: 5,
     tooltip:
       "他面倒くさいの全部満たしたと見なし「最終直線のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initFinalStraightRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
-  },
-  {
-    id: 10411,
-    name: "学級委員長+速さ＝バクシン",
-    noInherit: true,
-    targetSpeed: 0.25,
-    duration: 5,
-    tooltip: "「レース1/2～5/6のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initIntervalRandom(0.5, 5.0 / 6);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
     id: 100411,
+    holder: 104101,
     name: "優等生×バクシン＝大勝利ッ",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "「レース1/2～5/6のどこかで発動する」として扱う。",
     init: function () {
-      this.randoms = thiz.initIntervalRandom(0.5, 5.0 / 6);
+      thiz.randoms = thiz.initIntervalRandom(0.5, 5.0 / 6);
     },
     check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
-  },
-  {
-    id: 10561,
-    name: "来てください来てください！",
-    noInherit: true,
-    targetSpeed: 0.25,
-    duration: 5,
-    tooltip: "「終盤のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(2);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+      return thiz.isInRandom(thiz.randoms, startPosition);
     },
   },
   {
     id: 100561,
+    holder: 105601,
     name: "来ます来てます来させます！",
     targetSpeed: 0.35,
+    acceleration: 0.1,
     duration: 5,
     tooltip: "「終盤のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(2);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
+    conditions: { phase_random: 2 },
   },
-  {
-    id: 10601,
-    name: "アタシもたまには、ね？",
-    noInherit: true,
-    targetSpeed: 0.25,
-    duration: 5,
-    tooltip: "「ラストスパートのどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(3);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
-  },
+  // {
+  //   id: 10601,
+  //   name: "アタシもたまには、ね？",
+  //   noInherit: true,
+  //   targetSpeed: 0.25,
+  //   duration: 5,
+  //   tooltip: "「ラストスパートのどこかで発動する」として扱う。",
+  //   init: function () {
+  //     thiz.randoms = thiz.initPhaseRandom(3);
+  //   },
+  //   check: function (startPosition) {
+  //     return thiz.isInRandom(thiz.randoms, startPosition);
+  //   },
+  // },
   {
     id: 100601,
+    holder: 106001,
     name: "きっとその先へ…！",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "「ラストスパートのどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(3);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
+    conditions: { phase_random: 3 },
   },
-  {
-    id: 10111,
-    name: "精神一到",
-    noInherit: true,
-    targetSpeed: 0.25,
-    duration: 5,
-    tooltip: "「最終直線のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initFinalStraightRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
-  },
+  // {
+  //   id: 10111,
+  //   name: "精神一到",
+  //   noInherit: true,
+  //   targetSpeed: 0.25,
+  //   duration: 5,
+  //   tooltip: "「最終直線のどこかで発動する」として扱う。",
+  //   init: function () {
+  //     thiz.randoms = thiz.initFinalStraightRandom();
+  //   },
+  //   check: function (startPosition) {
+  //     return thiz.isInRandom(thiz.randoms, startPosition);
+  //   },
+  // },
   {
     id: 100111,
+    holder: 101101,
     name: "精神一到何事か成らざらん",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "「最終直線のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initFinalStraightRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
-  {
-    id: 10611,
-    name: "Call me KING",
-    noInherit: true,
-    targetSpeed: 0.35,
-    duration: 5,
-    check: function (startPosition) {
-      return (
-        startPosition <= thiz.toPosition(200) &&
-        thiz.position >= thiz.toPosition(200) &&
-        thiz.temptationModeStart == null &&
-        thiz.startDelay < 0.08
-      );
-    },
-  },
+  // {
+  //   id: 10611,
+  //   name: "Call me KING",
+  //   noInherit: true,
+  //   targetSpeed: 0.35,
+  //   duration: 5,
+  //   tooltip: "4～6位(<=70%)",
+  //   check: function (startPosition) {
+  //     return (
+  //       startPosition <= thiz.toPosition(200) &&
+  //       thiz.position >= thiz.toPosition(200) &&
+  //       thiz.temptationModeStart == null &&
+  //       thiz.startDelay < 0.08
+  //     );
+  //   },
+  // },
   {
     id: 100611,
+    holder: 106101,
     name: "Pride of KING",
     targetSpeed: 0.45,
     duration: 5,
+    tooltip: "4～6位(<=70%)",
     check: function (startPosition) {
       return (
         startPosition <= thiz.toPosition(200) &&
@@ -7189,155 +7113,157 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100011,
+    holder: 100101,
     name: "シューティングスター",
-    targetSpeed: 0.35,
+    speedWithDecel: 0.35,
     duration: 5,
-    tooltip: "「終盤のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(2);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    acceleration: 0.1,
+    tooltip: "終盤前半ランダム位置発動として扱う",
+    conditions: {
+      phase_random: 2,
     },
   },
   {
     id: 100021,
+    holder: 100201,
     name: "先頭の景色は譲らない…！",
     targetSpeed: 0.35,
     duration: 5,
     check: function () {
-      return thiz.isInFinalStraight();
+      return thiz.isInInterval(0.5, 1);
     },
   },
   {
     id: 100031,
+    holder: 100301,
     name: "究極テイオーステップ",
     targetSpeed: 0.45,
     duration: 5,
-    tooltip: "他の条件は無視して「最終直線であれば発動する」として扱う",
-    check: function () {
-      return thiz.isInFinalStraight();
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
     id: 100151,
+    holder: 101501,
     name: "ヴィットーリアに捧ぐ舞踏",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "「最終コーナーのどこかで発動」として扱う。まぁ発動しないけど。",
-    init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    conditions: {
+      is_finalcorner: 1,
+      corner: 1,
     },
   },
   {
     id: 100161,
+    holder: 101601,
     name: "Shadow Break",
-    targetSpeed: 0.35,
+    targetSpeed: 0.45,
     duration: 5,
-    tooltip: "「最終コーナーのどこかで発動」として扱う",
-    init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    tooltip: "競合あり、2～7位(<=75%)",
+    conditions: {
+      is_finalcorner: 1,
+      corner: 1,
     },
   },
   {
     id: 100231,
-    name: "∴win Q.E.D.",
-    targetSpeed: 0.35,
+    holder: 102301,
+    name: "∴win Q．E．D．",
     duration: 5,
-    tooltip: "「最終コーナーのどこかで発動」として扱う",
-    init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
+    type: "speed",
+    invokes: [
+      {
+        targetSpeed: 0.45,
+        conditions: {
+          phase: ">=2",
+          is_finalcorner: 1,
+          temptation_count: 0,
+        },
+      },
+      {
+        targetSpeed: 0.35,
+        conditions: {
+          phase: ">=2",
+          is_finalcorner: 1,
+        },
+      },
+    ],
   },
   {
     id: 100301,
+    holder: 103001,
     name: "ブルーローズチェイサー",
     targetSpeed: 0.35,
     duration: 5,
-    tooltip: "「最終直線のどこかで発動」として扱う",
-    init: function () {
-      this.randoms = thiz.initFinalStraightRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    conditions: {
+      phase: ">=2",
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
     id: 100501,
+    holder: 105001,
     name: "Nemesis",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "「最終コーナーのどこかで発動」として扱う",
-    init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    conditions: {
+      is_finalcorner: 1,
+      corner: 1,
     },
   },
   {
     id: 110031,
+    holder: 100302,
     name: "絶対は、ボクだ",
-    targetSpeed: 0.35,
+    targetSpeed: 0.45,
     duration: 5,
     tooltip: "「最終直線のどこかで発動」として扱う",
-    init: function () {
-      this.randoms = thiz.initFinalStraightRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
-    id: 110241,
+    id: 110241.1,
+    holder: 102402,
     name: "フラワリー☆マニューバ(前)",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "「最終コーナーのどこかで発動」として扱う。こちらは前の方。",
-    init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    conditions: {
+      is_finalcorner: 1,
+      corner: 1,
     },
   },
   {
     id: 110181,
+    holder: 101802,
     name: "薫風、永遠なる瞬間を",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "「中盤のどこかで発動」として扱うが、基本的には発動しない。",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(1);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
+    conditions: { phase_random: 1 },
   },
   {
     id: 100121,
+    holder: 101201,
     name: "タイマン！デッドヒート！",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "「最終直線のどこかで発動」として扱う。",
-    init: function () {
-      this.randoms = thiz.initFinalStraightRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
     id: 110041,
+    holder: 100402,
     name: "グッときて♪Chu",
     targetSpeed: 0.35,
     duration: 5,
@@ -7349,45 +7275,42 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100371,
-    name: "Schwarze Schwert",
-    targetSpeed: 0.35,
+    holder: 103701,
+    name: "Schwarzes Schwert",
+    targetSpeed: 0.45,
     duration: 5,
-    check: function () {
-      return (
-        thiz.isInFinalStraight() &&
-        thiz.temptationModeStart == null &&
-        thiz.startDelay < 0.08
-      );
+    conditions: {
+      temptation_count: 0,
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
-    id: 0,
+    id: 110561,
+    holder: 105602,
     name: "禾スナハチ登ル",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "50%-60%地点のどこかで発動として扱う",
     init: function () {
-      this.randoms = thiz.initIntervalRandom(0.5, 0.6);
+      thiz.randoms = thiz.initIntervalRandom(0.5, 0.6);
     },
     check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+      return thiz.isInRandom(thiz.randoms, startPosition);
     },
   },
   {
-    id: 0,
+    id: 100191,
+    holder: 101901,
     name: "尊み☆ﾗｽﾄｽﾊﾟ━━(ﾟ∀ﾟ)━━ﾄ!",
     targetSpeed: 0.35,
     duration: 5,
     tooltip: "フェイズ2のどこか発動として扱う",
-    init: function () {
-      this.randoms = thiz.initPhaseRandom(2);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
+    conditions: { phase_random: 2 },
   },
   {
-    id: 0,
+    id: 100391,
+    holder: 103901,
     name: "姫たるもの、勝利をこの手に",
     targetSpeed: 0.35,
     duration: 5,
@@ -7397,7 +7320,8 @@ const uniqueSkillData = (thiz) => [
     },
   },
   {
-    id: 0,
+    id: 100251,
+    holder: 102501,
     name: "アナタヲ・オイカケテ",
     targetSpeed: 0.25,
     duration: 6,
@@ -7407,34 +7331,42 @@ const uniqueSkillData = (thiz) => [
     },
   },
   {
-    id: 100171,
+    id: 110171,
+    holder: 101702,
     name: "翳り退く、さざめきの矢",
     targetSpeed: 0.35,
-    duration: 5,
-    check: function () {
-      return thiz.isInFinalCorner();
+    duration: 6,
+    conditions: {
+      phase: ">=2",
+      is_finalcorner: 1,
     },
   },
   {
     id: 100481,
+    holder: 104801,
     name: "YEAH☆VIVID TIME!",
     targetSpeed: 0.35,
     duration: 5,
-    check: function () {
-      return thiz.isInFinalStraight();
+    tooltip: "最終直線即発動として扱う",
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
-    id: 100231,
+    id: 110231,
+    holder: 102302,
     name: "Presents from X",
     targetSpeed: 0.35,
     duration: 5,
-    check: function () {
-      return thiz.position >= thiz.courseLength * 0.5;
+    conditions: {
+      phase: 1,
+      distance_rate: ">=50",
     },
   },
   {
     id: 100041,
+    holder: 100401,
     name: "紅焔ギア/LP1211-M",
     acceleration: 0.4,
     duration: 4,
@@ -7446,78 +7378,57 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100101,
+    holder: 101001,
     name: "ヴィクトリーショット！",
     acceleration: 0.4,
-    duration: 4,
+    duration: 5,
     tooltip: "順位>=3及び<=50%は満たしていると見なす",
     check: function () {
-      return thiz.isInFinalCorner();
-    },
-  },
-  {
-    id: 10271,
-    name: "燃えろ筋肉！",
-    noInherit: true,
-    acceleration: 0.3,
-    duration: 4,
-    styleLimit: [3, 4],
-    tooltip:
-      "常に順位>=65%及び<=70%は満たしていると見なす。実戦は発動がより遅くなる。",
-    check: function () {
-      return thiz.currentPhase >= 2 && thiz.isInCorner();
+      return thiz.isInFinalCorner(thiz.position, { start: 0.5, end: 1 });
     },
   },
   {
     id: 100271,
+    holder: 102701,
     name: "レッツ・アナボリック！",
     acceleration: 0.4,
     duration: 4,
-    styleLimit: [3, 4],
-    tooltip:
-      "常に順位>=65%及び<=70%は満たしていると見なす。実戦は発動がより遅くなる。",
-    check: function () {
-      return thiz.currentPhase >= 2 && thiz.isInCorner();
-    },
+    conditions: { phase: ">=2", corner: 1, running_style: [3, 4] },
   },
   {
     id: 100201,
+    holder: 102001,
     name: "アングリング×スキーミング",
     acceleration: 0.4,
     duration: 4,
-    styleLimit: [1, 2],
-    tooltip: "順位1位は満たしたと見なす",
-    check: function () {
-      return thiz.currentPhase >= 2 && thiz.isInCorner();
-    },
+    conditions: { phase: ">=2", corner: 1, running_style: [1, 2] },
   },
   {
-    id: 110241,
+    id: 110241.2,
+    holder: 102402,
     name: "フラワリー☆マニューバ(後)",
     acceleration: 0.4,
     duration: 4,
     tooltip: "「最終コーナーのどこかで発動」として扱う。こちらは後の方。",
     init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
+      thiz.randoms = thiz.initFinalCornerRandom();
     },
     check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+      return thiz.isInRandom(thiz.randoms, startPosition);
     },
   },
   {
-    id: 100131,
+    id: 110141,
+    holder: 101402,
     name: "コンドル猛撃波",
     acceleration: 0.4,
     duration: 4,
-    init: function () {
-      this.randoms = thiz.initFinalCornerRandom();
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
+    conditions: { is_finalcorner: 1, corner: 1 },
   },
   {
-    id: 0,
-    name: "KEEP IT REAL.",
+    id: 100401,
+    holder: 104001,
+    name: "KEEP IT REAL．",
     acceleration: 0.3,
     duration: 6,
     tooltip: "50%地点で即発動として扱う",
@@ -7527,201 +7438,137 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100591,
+    holder: 105901,
     name: "彼方、その先へ…",
     acceleration: 0.4,
     duration: 4,
-    styleLimit: [3, 4],
     tooltip: "常に順位>=50%及び<=70%は満たしていると見なす。",
-    check: function () {
+    check: function (startPosition) {
       return (
         thiz.temptationModeStart == null &&
         ((thiz.currentPhase >= 2 &&
-          !thiz.isInFinalCorner() &&
-          thiz.isInCorner()) ||
-          (thiz.currentPhase === 1 &&
-            thiz.isInFinalCorner() &&
-            thiz.isInCorner()))
+          !thiz.isInFinalCorner(startPosition) &&
+          thiz.isInCorner(startPosition)) ||
+          (thiz.currentPhase === 1 && thiz.isInFinalCorner(startPosition)))
       );
-    },
-  },
-  {
-    id: 10091,
-    name: "レッドエース",
-    noInherit: true,
-    boost: {
-      targetSpeed: 0.15,
-      acceleration: 0.2,
-    },
-    duration: 5,
-    tooltip: "「レース1/2～5/6のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initIntervalRandom(0.5, 5.0 / 6);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
     },
   },
   {
     id: 100091,
+    holder: 100901,
     name: "ブリリアント・レッドエース",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
+    targetSpeed: 0.25,
+    acceleration: 0.3,
     duration: 5,
-    tooltip: "「レース1/2～5/6のどこかで発動する」として扱う。",
-    init: function () {
-      this.randoms = thiz.initIntervalRandom(0.5, 5.0 / 6);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
-    },
-  },
-  {
-    id: 10141,
-    name: "熱血☆アミーゴ",
-    noInherit: true,
-    boost: {
-      targetSpeed: 0.15,
-      acceleration: 0.2,
-    },
-    duration: 5,
-    tooltip: "順位2位以内は満たしていると見なす",
-    check: function () {
-      return thiz.isInFinalStraight() && thiz.sp >= 0.3 * thiz.spMax;
+    tooltip: "「レース50%～75%のどこかで発動する」として扱う。",
+    conditions: {
+      distance_rate_random: [50, 75],
     },
   },
   {
     id: 100141,
+    holder: 101401,
     name: "プランチャ☆ガナドール",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
+    targetSpeed: 0.25,
+    acceleration: 0.3,
     duration: 5,
-    tooltip:
-      "順位2位以内は満たしていると見なす。最終直線に入った瞬間に発動として扱う。",
-    check: function () {
-      return thiz.isInFinalStraight() && thiz.sp >= 0.3 * thiz.spMax;
-    },
-  },
-  {
-    id: 10241,
-    name: "勝利のキッス☆",
-    noInherit: true,
-    boost: {
-      targetSpeed: 0.15,
-      acceleration: 0.2,
-    },
-    duration: 5,
-    tooltip: "条件を満たして最終直線入ったときに発動するとして扱う",
-    check: function () {
-      return thiz.isInFinalStraight();
+    tooltip: "最終直線即発動として扱う。",
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
+      hp_per: ">=30",
     },
   },
   {
     id: 100241,
+    holder: 102401,
     name: "ひらめき☆ランディング",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
+    targetSpeed: 0.25,
+    acceleration: 0.3,
     duration: 5,
-    tooltip: "最終コーナーで発動として扱う",
-    check: function () {
-      return thiz.isInFinalCorner();
+    tooltip: "最終コーナーで即発動として扱う",
+    conditions: {
+      is_finalcorner: 1,
     },
   },
   {
     id: 100381,
+    holder: 103801,
     name: "#LookatCurren",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
+    targetSpeed: 0.25,
+    acceleration: 0.3,
     duration: 5,
-    tooltip: "「レース50%-65%のどこかで発動する」として扱う",
-    init: function () {
-      this.randoms = thiz.initIntervalRandom(0.5, 0.65);
-    },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    tooltip: "2～4位(<=40%)。レース50%-65%のどこかで発動。",
+    conditions: {
+      distance_rate_random: [50, 65],
     },
   },
   {
     id: 100461,
+    holder: 104601,
     name: "キラキラ☆STARDOM",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
+    targetSpeed: 0.25,
+    acceleration: 0.3,
     duration: 5,
     tooltip: "中盤のコーナーではない地点と即発動としてみなす",
-    check: function (startPosition) {
-      return (
-        !thiz.isInCorner(startPosition) && thiz.getPhase(startPosition) === 1
-      );
+    conditions: {
+      phase: 1,
+      corner: 0,
     },
   },
   {
     id: 100581,
+    holder: 105801,
     name: "I Never Goof Up!",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
+    targetSpeed: 0.25,
+    acceleration: 0.3,
     duration: 5,
-    tooltip: "「終盤のコーナーのどこかで発動」として扱う",
-    init: function () {
-      this.randoms = thiz.initPhase2CornerRandom();
+    conditions: {
+      phase_random: 2,
     },
-    check: function (startPosition) {
-      return thiz.isInRandom(this.randoms, startPosition);
+    tooltip: "「終盤前半ランダムで発動」として扱う",
+  },
+  {
+    id: 100281,
+    holder: 102801,
+    name: "I’M☆FULL☆SPEED!!",
+    targetSpeed: 0.25,
+    acceleration: 0.3,
+    duration: 5,
+    conditions: {
+      distance_rate: [45, 60],
+      hp_per: "<=70",
     },
   },
   {
-    id: 0,
-    name: "I'M☆FULL☆SPEED!!",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
-    duration: 5,
-    tooltip: "順位条件は満たしてると見なす",
-    check: function () {
-      return thiz.isInDistanceRate(0.45, 0.6) && thiz.isSPInRange(0, 0.7);
-    },
-  },
-  {
-    id: 0,
+    id: 110451,
+    holder: 104502,
     name: "ぐるぐるマミートリック♡",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
+    targetSpeed: 0.25,
+    acceleration: 0.3,
     duration: 5,
-    tooltip:
-      "最終直線に入った瞬間に発動として扱う。順位条件は満たしてると見なす。",
-    check: function () {
-      return thiz.isInFinalStraight();
+    tooltip: "最終直線に入った瞬間に発動として扱う",
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
     },
   },
   {
     id: 110401,
+    holder: 104002,
     name: "GET DOWN",
-    boost: {
-      targetSpeed: 0.25,
-      acceleration: 0.3,
-    },
+    targetSpeed: 0.25,
+    acceleration: 0.3,
     duration: 5,
-    tooltip:
-      "最終コーナーに入った瞬間に発動として扱う。順位条件は満たしてると見なす。",
-    check: function () {
-      return thiz.isInFinalCorner();
+    tooltip: "最終コーナーに入った瞬間に発動として扱う",
+    conditions: {
+      is_finalcorner: 1,
+      corner: 1,
     },
   },
   {
     id: 110061,
+    holder: 100602,
     name: "聖夜のミラクルラン！",
     targetSpeed: 0.25,
     acceleration: 0.3,
@@ -7735,6 +7582,7 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100221,
+    holder: 102201,
     name: "Fairy tale",
     targetSpeed: 0.35,
     duration: 5,
@@ -7744,6 +7592,7 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100211,
+    holder: 102101,
     name: "白い稲妻、見せたるで！",
     targetSpeed: 0.35,
     acceleration: 0.1,
@@ -7754,6 +7603,7 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 110521,
+    holder: 105202,
     name: "113転び114起き",
     targetSpeed: 0.25,
     duration: 6,
@@ -7764,9 +7614,10 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 110151,
+    holder: 101502,
     name: "恵福バルカローレ",
     targetSpeed: 0.45,
-    duration: 4,
+    duration: 5,
     tooltip: "7回発動したとして扱う。じゃないと弱すぎる。",
     check: function (startPosition) {
       return (
@@ -7777,7 +7628,7 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100691,
-    hid: 900691,
+    holder: 106901,
     name: "憧れは桜を越える！",
     targetSpeed: 0.35,
     duration: 5,
@@ -7790,6 +7641,7 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 110261,
+    holder: 102602,
     name: "オペレーション・Cacao",
     targetSpeed: 0.35,
     heal: 150,
@@ -7800,16 +7652,18 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 110371,
+    holder: 103702,
     name: "Guten Appetit♪",
     targetSpeed: 0.35,
     duration: 6,
-    tooltip: "最終コーナー以降で3人追い抜きは満たしたと見なす",
+    tooltip: "最終コーナー以降で2人追い抜きは満たしたと見なす",
     check: function () {
       return thiz.isInFinalStraight();
     },
   },
   {
     id: 100331,
+    holder: 103301,
     name: "ディオスクロイの流星",
     targetSpeed: 0.45,
     duration: 5,
@@ -7821,6 +7675,7 @@ const uniqueSkillData = (thiz) => [
   },
   {
     id: 100681,
+    holder: 106801,
     name: "勝ち鬨ワッショイ！",
     targetSpeed: 0.25,
     acceleration: 0.3,
@@ -7833,20 +7688,21 @@ const uniqueSkillData = (thiz) => [
       );
     },
   },
-  {
-    id: 10621,
-    name: "レディー、どんっ！",
-    noInherit: true,
-    targetSpeed: 0.15,
-    heal: 350,
-    duration: 5,
-    tooltip: "3～6位(<=70%)",
-    check: function () {
-      return thiz.isInInterval(0.5, 1) && thiz.isPhase(1);
-    },
-  },
+  // {
+  //   id: 10621,
+  //   name: "レディー、どんっ！",
+  //   noInherit: true,
+  //   targetSpeed: 0.15,
+  //   heal: 350,
+  //   duration: 5,
+  //   tooltip: "3～6位(<=70%)",
+  //   check: function () {
+  //     return thiz.isInInterval(0.5, 1) && thiz.isPhase(1);
+  //   },
+  // },
   {
     id: 100621,
+    holder: 106201,
     name: "どんっ、パッ、むんっ",
     targetSpeed: 0.25,
     heal: 550,
@@ -7856,6 +7712,1165 @@ const uniqueSkillData = (thiz) => [
       return thiz.isInInterval(0.5, 1) && thiz.isPhase(1);
     },
   },
+  {
+    id: 100051,
+    holder: 100501,
+    name: "煌星のヴォードヴィル",
+    targetSpeed: 0.45,
+    duration: 5,
+    conditions: {
+      remain_distance: "<=300",
+    },
+  },
+  {
+    id: 100671,
+    holder: 106701,
+    name: "晦冥を照らせ永遠の耀き",
+    targetSpeed: 0.45,
+    duration: 5,
+    tooltip: "2～5位。発動時先頭から5m以内の場合。",
+    check: function () {
+      return thiz.isInFinalStraight();
+    },
+  },
+  {
+    id: 100711,
+    holder: 107101,
+    name: "一期の夢、刹那の飛翔",
+    targetSpeed: 0.45,
+    heal: -100,
+    duration: 4,
+    check: function () {
+      return thiz.isInFinalStraight();
+    },
+  },
+  {
+    id: 100741,
+    holder: 107401,
+    name: "麗しき花信風",
+    targetSpeed: 0.15,
+    duration: 5,
+    tooltip: "4～7位",
+    conditions: {
+      distance_rate: ">=50",
+    },
+    trigger: function (skill) {
+      const map = {
+        2000: 1,
+        2400: 1.5,
+        2600: 2,
+        2800: 2.2,
+        3000: 2.5,
+        3200: 3,
+        3500: 3.5,
+        99999999: 4,
+      };
+      for (const key in map) {
+        if (thiz.sp < key) {
+          skill.durationOverwrite = skill.duration * map[key];
+          return {
+            extended: map[key].toString(),
+          };
+        }
+      }
+    },
+  },
+  {
+    id: 110051,
+    holder: 100502,
+    name: "Ravissant",
+    targetSpeed: 0.45,
+    duration: 4,
+    check: function () {
+      return thiz.isInFinalCorner() || thiz.isInFinalStraight();
+    },
+  },
+  {
+    id: 110201,
+    holder: 102002,
+    name: "Do Ya Breakin!",
+    targetSpeed: 0.35,
+    acceleration: 0.2,
+    duration: 5,
+    conditions: {
+      phase: ">=2",
+      corner: 0,
+      straight_front_type: 2,
+    },
+  },
+  {
+    id: 100511,
+    holder: 105101,
+    name: "つぼみ、ほころぶ時",
+    acceleration: 0.4,
+    duration: 4,
+    check: function () {
+      return (
+        (thiz.isPhase(2) || thiz.isPhase(3)) &&
+        (thiz.isInFinalStraight() ||
+          thiz.isInFinalCorner(thiz.position, { start: 0.5, end: 1 }))
+      );
+    },
+  },
+  {
+    id: 100721,
+    holder: 107201,
+    name: "烈火繚乱、無敵之舞",
+    targetSpeed: 0.35,
+    duration: 5,
+    tooltip: "<=40%(1～4位)",
+    check: function (startPosition) {
+      return (
+        startPosition <= thiz.toPosition(300) &&
+        thiz.position >= thiz.toPosition(300)
+      );
+    },
+  },
+  {
+    id: 110601,
+    holder: 106002,
+    name: "Go☆Go☆for it!",
+    targetSpeed: 0.35,
+    duration: 6,
+    tooltip: ">=40% <=70%(4～6位)、4人気以下",
+    check: function () {
+      return thiz.isInFinalStraight();
+    },
+  },
+  {
+    id: 110611,
+    holder: 106102,
+    name: "轟！トレセン応援団！！",
+    acceleration: 0.4,
+    duration: 4,
+    tooltip: "距離50%まで6～9位",
+    check: function () {
+      return thiz.isInFinalStraight() && thiz.temptationModeStart == null;
+    },
+  },
+  {
+    id: 100311,
+    holder: 103101,
+    name: "チャージ完了！全速前進！",
+    targetSpeed: 0.45,
+    duration: 5,
+    tooltip: "東京時、1～2位",
+    check: function (startPosition) {
+      return (
+        startPosition <= thiz.toPosition(300) &&
+        thiz.position >= thiz.toPosition(300)
+      );
+    },
+  },
+  {
+    id: 100641,
+    holder: 106401,
+    name: "ぶっちぎりロード",
+    heal: 550,
+    targetSpeed: 0.25,
+    duration: 6,
+    tooltip: "距離50%までずっと1～2位",
+    check: function () {
+      return thiz.position >= thiz.courseLength * 0.5;
+    },
+  },
+  {
+    id: 110221,
+    holder: 102202,
+    name: "Best day ever",
+    targetSpeed: 0.35,
+    acceleration: 0.1,
+    duration: 5,
+    tooltip: "2～4位。加速力は残り401m以上がある場合（自動で判断していない）",
+    check: function () {
+      return thiz.currentPhase >= 2 && thiz.isInFinalCorner();
+    },
+  },
+  {
+    id: 110381,
+    holder: 103802,
+    name: "One True Color",
+    targetSpeed: 0.25,
+    acceleration: 0.3,
+    duration: 5,
+    tooltip: "2～4位、後ろ１馬身。",
+    check: function (startPosition) {
+      return thiz.isContainsRemainingDistance(350, startPosition);
+    },
+  },
+  {
+    id: 100341,
+    holder: 103401,
+    name: "快走かな、快走かな！",
+    targetSpeed: 0.45,
+    duration: 5,
+    tooltip: "最終直線ランダム発動として扱う",
+    init: function () {
+      thiz.randoms = thiz.initFinalStraightRandom();
+    },
+    check: function (startPosition) {
+      return thiz.isInRandom(thiz.randoms, startPosition);
+    },
+  },
+  {
+    id: 110101,
+    holder: 101002,
+    name: "Joyful Voyage!",
+    targetSpeed: 0.35,
+    speedWithDecel: 0.15,
+    duration: 5,
+    tooltip: "2～4位。追加条件は満たしたとしてみなす。",
+    conditions: {
+      remain_distance: [199, 201],
+    },
+  },
+  {
+    id: 110591,
+    holder: 105902,
+    name: "ときめきが呼ぶほうへ",
+    targetSpeed: 0.35,
+    duration: 5,
+    tooltip: "4～7位。",
+    conditions: {
+      distance_rate: ">=60",
+    },
+    check: function () {
+      return (
+        thiz.isPhase(1) &&
+        thiz.position >= thiz.courseLength * 0.6 &&
+        thiz.courseLength - thiz.position >= 500 &&
+        thiz.isInSlope("down")
+      );
+    },
+  },
+  {
+    id: 100361,
+    holder: 103601,
+    name: "trigger:BEAT",
+    targetSpeed: 0.35,
+    duration: 5,
+    tooltip: "4～7位。",
+    check: function (startPosition) {
+      return thiz.isInFinalStraight(startPosition);
+    },
+  },
+  {
+    id: 120131,
+    holder: 101303,
+    name: "きらめくは海、まばゆきは君",
+    targetSpeed: 0.15,
+    duration: 5,
+    tooltip: "1～4位",
+    conditions: {
+      distance_rate: ">=50",
+    },
+    trigger: function (skill) {
+      const map = {
+        2000: 1,
+        2400: 1.5,
+        2600: 2,
+        2800: 2.2,
+        3000: 2.5,
+        3200: 3,
+        3500: 3.5,
+        99999999: 4,
+      };
+      for (const key in map) {
+        if (thiz.sp < key) {
+          skill.durationOverwrite = skill.duration * map[key];
+          return {
+            extended: map[key].toString(),
+          };
+        }
+      }
+    },
+  },
+  {
+    id: 100441,
+    holder: 104401,
+    name: "いただき☆ストレリチア！",
+    targetSpeed: 0.35,
+    duration: 6,
+    check: function (startPosition) {
+      return (
+        startPosition <= thiz.toPosition(300) &&
+        thiz.position >= thiz.toPosition(300) &&
+        thiz.temptationModeStart == null
+      );
+    },
+  },
+  {
+    id: 100981,
+    holder: 109801,
+    name: "理運開かりて翔る",
+    targetSpeed: 0.25,
+    acceleration: 0,
+    duration: 5,
+    init: function () {
+      thiz.randoms = thiz.initPhaseRandom(1, { startRate: 0.5 });
+    },
+    check: function (startPosition) {
+      return thiz.isInRandom(thiz.randoms, startPosition);
+    },
+    trigger: function (skill) {
+      if (skill.id === 900981) {
+        skill.targetSpeed = 0.05;
+        skill.acceleration = 0;
+        return;
+      }
+      const rate = [0, 0, 0, 1, 1, 2];
+      skill.targetSpeed =
+        0.25 +
+        (thiz.passiveTriggered > 5 ? 3 : rate[thiz.passiveTriggered]) * 0.05;
+      skill.acceleration =
+        (thiz.passiveTriggered > 5 ? 3 : rate[thiz.passiveTriggered]) * 0.05;
+    },
+  },
+  {
+    id: 110461,
+    holder: 104602,
+    name: "α-star*",
+    targetSpeed: 0.25,
+    heal: 350,
+    duration: 6,
+    conditions: {
+      ground_type: 2,
+      distance_rate: [">=40", "<=50"],
+    },
+    tooltip: "MAX発動時",
+  },
+  {
+    id: 110351,
+    holder: 103502,
+    name: "夢の先へ、届け！",
+    targetSpeed: 0.35,
+    duration: 6,
+    tooltip: "面倒なので0.35として計算。",
+    check: function () {
+      return thiz.isInFinalStraight();
+    },
+  },
+  {
+    id: 110501,
+    holder: 105002,
+    name: "Hephaistos",
+    targetSpeed: 0.35,
+    duration: 5,
+    check: function () {
+      return (
+        thiz.isInFinalCorner(thiz.position, { start: 0.5, end: 1 }) &&
+        (thiz.isPhase(2) || thiz.isPhase(3))
+      );
+    },
+  },
+  {
+    id: 100291,
+    holder: 102901,
+    name: "ゆきあかり、おいかけて",
+    targetSpeed: 0.35,
+    duration: 5,
+    tooltip: "300m即発動として扱う。実際は先頭か先頭と5m以内の差で1～4位。",
+    check: function (startPosition) {
+      return (
+        startPosition <= thiz.toPosition(300) &&
+        thiz.position >= thiz.toPosition(300)
+      );
+    },
+  },
+  {
+    id: 100421,
+    holder: 104201,
+    name: "『I’m possible』",
+    targetSpeed: 0.45,
+    duration: 5,
+    tooltip: "2～9位、先頭と5m以内扱い",
+    check: function (startPosition) {
+      return (
+        startPosition <= thiz.toPosition(200) &&
+        thiz.position >= thiz.toPosition(200)
+      );
+    },
+  },
+  {
+    id: 110191,
+    holder: 101902,
+    name: "萌到讓我活過來了！",
+    targetSpeed: 0.35,
+    duration: 5,
+    conditions: {
+      phase: 1,
+      corner: 1,
+    },
+  },
+  {
+    id: 110581,
+    holder: 105802,
+    name: "Spooky-Scary-Happy",
+    targetSpeed: 0.35,
+    duration: 5,
+    check: function () {
+      return thiz.isInFinalStraight();
+    },
+  },
+  {
+    id: 100871,
+    holder: 108701,
+    name: "Silent letter",
+    targetSpeed: 0.25,
+    acceleration: 0.3,
+    duration: 5,
+    tooltip: "400m即発動として扱う",
+    check: function (startPosition) {
+      return (
+        startPosition <= thiz.toPosition(400) &&
+        thiz.position >= thiz.toPosition(400)
+      );
+    },
+  },
+  {
+    id: 100781,
+    holder: 107801,
+    name: "風光る",
+    acceleration: 0.2,
+    duration: 8,
+    tooltip: "2位時",
+    check: function () {
+      return thiz.isInFinalCorner(thiz.position, { start: 0.5, end: 1 });
+    },
+  },
+  {
+    id: 110211,
+    holder: 102102,
+    name: "火神鳴",
+    targetSpeed: 0.3,
+    duration: 6,
+    tooltip: "2スキルで発動の即0.3として扱う",
+    check: function () {
+      return thiz.skillTriggerCount[1] >= 2;
+    },
+  },
+  {
+    id: 110341,
+    holder: 103402,
+    name: "灯穂",
+    targetSpeed: 0.385,
+    duration: 5,
+    tooltip: "0.385として扱う",
+    conditions: {
+      is_finalcorner: 1,
+      corner: 0,
+    },
+  },
+  {
+    id: 100491,
+    holder: 104901,
+    name: "剣ヶ峰より、狂気に嗤え",
+    targetSpeed: 0.45,
+    duration: 5,
+    tooltip: "0.45として扱う",
+    check: function () {
+      return thiz.remainDistance <= 400;
+    },
+  },
+  {
+    id: 101001,
+    holder: 110001,
+    name: "Never Say Never",
+    speedWithDecel: 0.25,
+    duration: 5,
+    conditions: {
+      remain_distance: [299, 301],
+      ground_type: 2,
+    },
+  },
+  {
+    id: 120011,
+    holder: 100103,
+    name: "威風堂々、夢錦！",
+    targetSpeed: 0.45,
+    duration: 5,
+    tooltip: "中山の0.45として扱う",
+    conditions: {
+      phase: ">=2",
+      is_finalcorner: 1,
+      corner: 1,
+      is_activate_any_skill: 1,
+      track_id: 10005,
+    },
+  },
+  {
+    id: 110091,
+    holder: 100902,
+    name: "Queen’s Lumination",
+    targetSpeed: 0.35,
+    duration: 6,
+    tooltip: "0.35のみ",
+    conditions: {
+      distance_rate: ">=50",
+      corner: 0,
+    },
+  },
+  {
+    id: 110081,
+    holder: 100802,
+    name: "Into High Gear!",
+    targetSpeed: 0.35,
+    acceleration: 0.1,
+    duration: 5,
+    tooltip: "常に東京として扱う。分ける実装面倒すぎぃ！",
+    check: function (startPosition) {
+      return (
+        thiz.isInSlope("down", startPosition) &&
+        !thiz.isInSlope("down") &&
+        thiz.phase >= 1
+      );
+    },
+  },
+  {
+    id: 100471,
+    holder: 104701,
+    name: "掲げよ、己が魂の剣を！",
+    targetSpeed: 0.45,
+    duration: 5,
+    tooltip: "0.45のみ",
+    conditions: {
+      remain_distance: 400,
+    },
+  },
+  {
+    id: 110161,
+    holder: 101602,
+    name: "灰色の臨界点",
+    targetSpeed: 0.55,
+    duration: 5,
+    tooltip: "0.55のみ",
+    conditions: {
+      distance_type: 4,
+      phase: ">=2",
+      is_finalcorner_laterhalf: 1,
+    },
+  },
+  {
+    id: 110671,
+    holder: 106702,
+    name: "玄雲散らす、黄金甲矢",
+    targetSpeed: 0.35,
+    heal: 350,
+    duration: 5,
+    conditions: {
+      distance_rate: [40, 50],
+    },
+  },
+  {
+    id: 110681,
+    holder: 106802,
+    name: "あっぱれ大盤振る舞い！",
+    speedWithDecel: 0.35,
+    acceleration: 0.1,
+    duration: 4,
+    conditions: {
+      phase: ">=2",
+      corner: 1,
+      remain_distance: ">=600",
+    },
+  },
+  {
+    id: 100991,
+    holder: 109901,
+    name: "かがやけ☆とまこまい",
+    acceleration: 0.4,
+    duration: 4,
+    tooltip: "最大スパート時のみ、3～4位＆中盤コーナーで競り合い",
+    conditions: {
+      ground_type: 2,
+      lastspurt: 2,
+      is_lastspurt: 1,
+    },
+  },
+  {
+    id: 100651,
+    holder: 106501,
+    name: "アゲてアゲてぷちょへんざ！",
+    targetSpeed: 0.25,
+    duration: 6,
+    tooltip: "短距離/マイルのみ、順位<=50%",
+    conditions: {
+      distance_type: [1, 2],
+      phase_laterhalf_random: 1,
+    },
+  },
+  {
+    id: 110271,
+    holder: 102702,
+    name: "あなたに捧げるフリーポア",
+    targetSpeed: 0.35,
+    acceleration: 0.1,
+    duration: 4,
+    tooltip: "中距離のみ、>=2位",
+    conditions: {
+      distance_rate: ">=60",
+      slope: 2,
+      phase: 1,
+      distance_type: 3,
+    },
+  },
+  {
+    id: 110311,
+    holder: 103102,
+    name: "フレッシュ☆パーラー",
+    targetSpeed: 0.25,
+    heal: 350,
+    duration: 6,
+    tooltip: "順位<=30%",
+    conditions: {
+      phase_firsthalf_random: 1,
+    },
+  },
+  {
+    id: 100431,
+    holder: 104301,
+    name: "Ding Dong Boo",
+    targetSpeed: 0.25,
+    acceleration: 0.4,
+    duration: 5,
+    tooltip: "ダートのみ、最終直線ランダム発動として扱う",
+    conditions: {
+      ground_type: 2,
+      is_finalstraight_random: 1,
+    },
+  },
+  {
+    id: 100571,
+    holder: 105701,
+    name: "叙情、旅路の果てに",
+    targetSpeed: 0.35,
+    duration: 6,
+    tooltip: "強化版のみ。6～9位で先頭から8馬身差。",
+    conditions: {
+      distance_type: [3, 4],
+      phase_laterhalf_random: 1,
+    },
+  },
+  {
+    id: 100661,
+    holder: 106601,
+    name: "エンジン全開！大噴射！",
+    type: "speed",
+    invokes: [
+      {
+        invokeNo: 1,
+        targetSpeed: 0.15,
+        duration: 13,
+        conditions: {
+          distance_rate: [34, 36],
+        },
+      },
+      {
+        invokeNo: 2,
+        speedWithDecel: -0.05,
+        duration: 500,
+        conditions: {
+          phase: 3,
+        },
+      },
+    ],
+  },
+  {
+    id: 100851,
+    holder: 108501,
+    name: "至上であれ",
+    speedWithDecel: 0.25,
+    duration: 5,
+    conditions: {
+      distance_rate: [66, 68],
+      temptation_count: 0,
+    },
+  },
+  {
+    id: 100531,
+    holder: 105301,
+    name: "熱血！！風紀アタック",
+    acceleration: 0.3,
+    duration: 5,
+    conditions: {
+      phase: ">=2",
+      is_finalcorner: 1,
+    },
+    tooltip: "MAXっぽい5秒の0.3加速として扱う",
+  },
+  {
+    id: 110071,
+    holder: 100702,
+    name: "Adventure of 564",
+    targetSpeed: 0.15,
+    duration: 5,
+    conditions: {
+      distance_rate_random: [50, 100],
+    },
+    trigger: function (thisSkill) {
+      const candidates = [];
+      for (const skill of thiz.invokedSkills) {
+        if (
+          !thiz.isInCoolDown(skill) &&
+          ["rare", "evo"].includes(skill.rarity)
+        ) {
+          candidates.push(skill);
+        }
+      }
+      const chainTriggered = [];
+      const num = thisSkill.type === "unique" ? 2 : 1;
+      for (let i = 0; i < num && candidates.length > 0; i++) {
+        const index = Math.floor(Math.random() * candidates.length);
+        chainTriggered.push(candidates[index]);
+        candidates.splice(index, 1);
+      }
+      return { chainTriggered };
+    },
+  },
+  {
+    id: 100831,
+    holder: 108301,
+    name: "Mission: Triumph",
+    targetSpeed: 0.35,
+    invokes: [
+      {
+        duration: 6,
+        conditions: {
+          distance_rate: ">=40",
+          corner: 0,
+          slope: 2,
+        },
+      },
+      {
+        duration: 5,
+        conditions: {
+          distance_rate: ">=40",
+          corner: 0,
+        },
+      },
+    ],
+  },
+  {
+    id: 110711,
+    holder: 107102,
+    name: "Danser le présent",
+    targetSpeed: 0.35,
+    speedWithDecel: 0.15,
+    heal: -300,
+    duration: 5,
+    tooltip: "順位>=20%,<=40%",
+    conditions: {
+      phase: ">=2",
+      is_finalcorner: 1,
+      corner: 0,
+    },
+  },
+  {
+    id: 110691,
+    holder: 106902,
+    name: "咲け咲け！私！",
+    acceleration: 0.4,
+    duration: 5,
+    tooltip: "順位>=30%,<=40%",
+    conditions: {
+      remain_distance: [649, 651],
+    },
+  },
+  {
+    id: 100761,
+    holder: 107601,
+    name: "花開き、世界",
+    invokes: [
+      {
+        heal: 750,
+        conditions: {
+          distance_type: 4,
+          distance_rate: [50, 51],
+        },
+      },
+      {
+        conditions: {
+          distance_rate: [50, 51],
+        },
+      },
+    ],
+    targetSpeed: 0.25,
+    duration: 6,
+    type: "speed",
+    tooltip: "順位>=30%,<=80%(3-7)",
+  },
+  {
+    id: 101051,
+    holder: 110501,
+    name: "アド・アストラ",
+    invokes: [
+      {
+        targetSpeed: 0.45,
+        conditions: {
+          distance_type: 3,
+          distance_rate: [50, 55],
+          activate_count_all: 7,
+        },
+      },
+      {
+        targetSpeed: 0.35,
+        conditions: {
+          distance_rate: [50, 55],
+        },
+      },
+    ],
+    type: "speed",
+    duration: 5,
+    tooltip: "順位>=30%,<=80%(3-7)",
+  },
+  {
+    id: 110621,
+    holder: 106202,
+    name: "ごろりん！？パワードライブ",
+    invokes: [
+      {
+        targetSpeed: 0.25,
+        acceleration: 0.1,
+        conditions: {
+          distance_type: 3,
+          distance_rate: ">=50",
+          corner: 1,
+        },
+      },
+      {
+        targetSpeed: 0.25,
+        conditions: {
+          distance_rate: ">=50",
+          corner: 1,
+        },
+      },
+    ],
+    duration: 6,
+    tooltip: "6秒扱い",
+    type: "composite",
+  },
+  {
+    id: 110411,
+    holder: 104102,
+    name: "CHERRY☆スクランブル",
+    acceleration: 0.4,
+    conditions: {
+      remain_distance: [399, 401],
+    },
+    duration: 4,
+    tooltip: "4秒扱い",
+  },
+  {
+    id: 101061,
+    holder: 110601,
+    name: "Bang☆ミラクるわせ！",
+    targetSpeed: 0.45,
+    conditions: {
+      distance_type: 4,
+      is_finalcorner_laterhalf: 1,
+    },
+    duration: 6,
+    tooltip: "4番人気以下時。>=40%,<=70%",
+  },
+  {
+    id: 100841,
+    holder: 108401,
+    name: "霹靂のアウフヘーベン",
+    invokes: [
+      {
+        speedWithDecel: 0.55,
+        conditions: {
+          phase: ">=2",
+          is_finalcorner: 1,
+          corner: 0,
+          distance_type: 3,
+          track_id: 10006,
+        },
+      },
+      {
+        speedWithDecel: 0.35,
+        conditions: {
+          phase: ">=2",
+          is_finalcorner: 1,
+          corner: 0,
+        },
+      },
+    ],
+    type: "speed",
+    duration: 5,
+  },
+  {
+    id: 110511,
+    holder: 105102,
+    name: "Flowering Dreams",
+    targetSpeed: 0.35,
+    speedWithDecel: 0.15,
+    conditions: {
+      remain_distance: [199, 201],
+    },
+    duration: 5,
+    tooltip: "2～<=70%。近くに3人条件は満たしているとみなす",
+  },
+  {
+    id: 110121,
+    holder: 101202,
+    name: "大盛り！ファーストバイト！",
+    targetSpeed: 0.35,
+    acceleration: 0.1,
+    conditions: {
+      distance_rate: ">=60",
+      phase: 1,
+      slope: 2,
+    },
+    duration: 4,
+    tooltip: "中盤追い越し3回のあと、順位>=50%",
+  },
+  {
+    id: 100551,
+    holder: 105501,
+    name: "万彩☆マーベラス★世界",
+    targetSpeed: 0.4,
+    conditions: {
+      distance_rate: [40, 50],
+    },
+    duration: 5,
+    tooltip: "0.4扱い",
+  },
+  {
+    id: 110531,
+    holder: 105302,
+    name: "奥義・常夏バーニング！！",
+    targetSpeed: 0.45,
+    conditions: {
+      remain_distance: [199, 201],
+    },
+    duration: 5,
+    tooltip: "0.45扱い",
+  },
+  {
+    id: 110481,
+    holder: 104802,
+    name: "GALmem．ふぉーえば♪",
+    targetSpeed: 0.3,
+    conditions: {
+      distance_rate: [40, 50],
+    },
+    duration: 6,
+    tooltip: "0.3扱い",
+  },
+  {
+    id: 101041,
+    holder: 110401,
+    name: "暁の御旗『葛城栄主』！",
+    targetSpeed: 0.25,
+    heal: 350,
+    conditions: {
+      corner: 3,
+      distance_type: 3,
+      track_id: 10006,
+    },
+    duration: 6,
+    tooltip: "6秒扱い",
+  },
+  {
+    id: 100701,
+    holder: 107001,
+    name: "セイリオス",
+    invokes: [
+      {
+        acceleration: 0.5,
+        duration: 4,
+        conditions: {
+          remain_distance: [799, 801],
+          course_distance: 2400,
+        },
+      },
+      {
+        acceleration: 0.2,
+        duration: 4,
+        conditions: {
+          remain_distance: [799, 801],
+        },
+      },
+    ],
+    type: "acceleration",
+    tooltip: "3番人気以上前提",
+  },
+  {
+    id: 110321,
+    holder: 103202,
+    name: "夏空ハレーション",
+    targetSpeed: 0.45,
+    duration: 4,
+    conditions: {
+      distance_rate: ">=50",
+      corner: 1,
+    },
+    tooltip: "加速度なし扱い",
+  },
+  {
+    id: 110021,
+    holder: 100202,
+    name: "水平線のその先へ",
+    invokes: [
+      {
+        speedWithDecel: 0.45,
+        duration: 5,
+        conditions: {
+          distance_rate: [66, 68],
+          corner: 3,
+        },
+      },
+      {
+        speedWithDecel: 0.25,
+        duration: 5,
+        conditions: {
+          distance_rate: [66, 68],
+        },
+      },
+    ],
+    type: "speed",
+  },
+  {
+    id: 100771,
+    holder: 107701,
+    name: "Road to Glory",
+    duration: 5,
+    invokes: [
+      {
+        targetSpeed: 0.55,
+        conditions: {
+          distance_type: 4,
+          remain_distance: [399, 401],
+        },
+      },
+      {
+        targetSpeed: 0.45,
+        conditions: {
+          remain_distance: [399, 401],
+        },
+      },
+    ],
+    type: "speed",
+    tooltip: "先頭と1馬身以内は満たしているとして扱う",
+  },
+  {
+    id: 120071,
+    holder: 100703,
+    name: "Vive la GOLD",
+    duration: 5,
+    invokes: [
+      {
+        targetSpeed: 0.45,
+        conditions: {
+          distance_type: [3, 4],
+          is_finalcorner: 1,
+          is_badstart: 1,
+        },
+      },
+      {
+        targetSpeed: 0.35,
+        conditions: {
+          distance_type: [3, 4],
+          is_finalcorner: 1,
+        },
+      },
+    ],
+    type: "speed",
+    tooltip: "先頭と1馬身以内は満たしているとして扱う",
+  },
+  {
+    id: 120671,
+    holder: 106703,
+    name: "ポンテ・デ・ディアマン",
+    duration: 5,
+    invokes: [
+      {
+        targetSpeed: 0.35,
+        conditions: {
+          phase_laterhalf_random: 1,
+          distance_type: 3,
+        },
+      },
+      {
+        targetSpeed: 0.25,
+        conditions: {
+          phase_laterhalf_random: 1,
+        },
+      },
+    ],
+    type: "speed",
+  },
+  {
+    id: 100931,
+    holder: 109301,
+    name: "幸せの青い光",
+    duration: 5,
+    invokes: [
+      {
+        speedWithDecel: 0.35,
+        conditions: {
+          phase_firsthalf_random: 2,
+          distance_type: [1, 2],
+        },
+      },
+      {
+        speedWithDecel: 0.25,
+        conditions: {
+          phase_firsthalf_random: 2,
+          distance_type: [3, 4],
+        },
+      },
+    ],
+    type: "speed",
+  },
+  {
+    id: 110831,
+    holder: 108302,
+    name: "Immortal Work",
+    duration: 5,
+    invokes: [
+      {
+        targetSpeed: 0.55,
+        conditions: {
+          is_last_straight: 1,
+          track_id: 10005,
+          distance_type: 3,
+        },
+      },
+      {
+        speedWithDecel: 0.35,
+        conditions: {
+          is_last_straight: 1,
+        },
+      },
+    ],
+    type: "speed",
+  },
+  {
+    id: 110361,
+    holder: 103602,
+    name: "…found you．",
+    duration: 5,
+    targetSpeed: 0.45,
+    conditions: {
+      phase: ">=2",
+      is_finalcorner: 1,
+      corner: 0,
+    },
+    tooltip: "0.45の即時発動扱い",
+  },
+  {
+    id: 100861,
+    holder: 108601,
+    name: "愛と熔けよただ熔けよ",
+    duration: 5,
+    targetSpeed: 0.35,
+    conditions: {
+      remain_distance: [999, 1001],
+    },
+  },
+  // End of unique skills
 ];
-// End of unique skills
+
 export { normalSkillData, uniqueSkillData };
